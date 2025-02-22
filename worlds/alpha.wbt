@@ -1,0 +1,230 @@
+#VRML_SIM R2023b utf8
+
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/floors/protos/RectangleArena.proto"
+
+WorldInfo {
+}
+Viewpoint {
+  orientation -0.029760987381045382 -0.028263547981956735 0.9991573727324324 4.6600773656050585
+  position -0.4212742048654218 -0.4064915629856559 0.12524701340737215
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+RectangleArena {
+  floorSize 5 5
+}
+Robot {
+  translation -0.42 -0.81 0
+  children [
+    Solid {
+      translation 0 0 0.11
+      children [
+        DEF GRIPPER_BASE_POSE Pose {
+          children [
+            DEF GRIPPER_BASE_SHAPE Shape {
+              appearance PBRAppearance {
+                roughness 1
+                metalness 0
+              }
+              geometry Mesh {
+                url [
+                  "../protos/gripper/gripper_body.obj"
+                ]
+              }
+              castShadows FALSE
+            }
+          ]
+        }
+        DEF GRIPPER_RIGHT_BASE_OUTER HingeJoint {
+          jointParameters HingeJointParameters {
+            axis 0 1 0
+          }
+          device [
+            RotationalMotor {
+              name "gripper_right::base_outer::rotational_motor"
+            }
+            PositionSensor {
+              name "gripper_right::base_outer::position_sensor"
+            }
+          ]
+          endPoint Solid {
+            translation -0.0035 0 -0.008
+            rotation 0 1 0 0
+            children [
+              Shape {
+                appearance PBRAppearance {
+                  roughness 1
+                  metalness 0
+                }
+                geometry Mesh {
+                  url [
+                    "../protos/gripper/v2/gripper_right_outer.obj"
+                  ]
+                }
+                castShadows FALSE
+              }
+              DEF GRIPPER_RIGHT_OUTER_PADDLE HingeJoint {
+                jointParameters HingeJointParameters {
+                  axis 0 1 0
+                  anchor 0.04 0 -0.015
+                }
+                device [
+                  RotationalMotor {
+                    name "gripper_right::outer_paddle::rotational_motor"
+                  }
+                  PositionSensor {
+                    name "gripper_right::outer_paddle::position_sensor"
+                  }
+                ]
+                endPoint Solid {
+                  children [
+                    DEF GRIPPER_RIGHT_PADDLE_SHAPE Shape {
+                      appearance PBRAppearance {
+                        roughness 1
+                        metalness 0
+                      }
+                      geometry Mesh {
+                        url [
+                          "../protos/gripper/v2/gripper_right_paddle.obj"
+                        ]
+                      }
+                      castShadows FALSE
+                    }
+                    HingeJoint {
+                      jointParameters HingeJointParameters {
+                        axis 0 1 0
+                        anchor 0.033 0 -0.038
+                      }
+                      device [
+                        RotationalMotor {
+                          name "gripper_right::paddle::rotational_motor"
+                        }
+                        PositionSensor {
+                          name "gripper_right::paddle::position_sensor"
+                        }
+                      ]
+                      endPoint Solid {
+                        translation 0.033 0 -0.038
+                        rotation 0 1 0 0
+                        children [
+                          Shape {
+                            geometry Box {
+                              size 0.015 0.015 0.015
+                            }
+                          }
+                        ]
+                        name "gripper_right::paddle_joint"
+                      }
+                    }
+                    Solid {
+                      translation 0.033 0 -0.038
+                      rotation 0 1 0 0
+                      children [
+                        Shape {
+                          geometry Box {
+                            size 0.015 0.015 0.015
+                          }
+                        }
+                      ]
+                      name "gripper_right::paddle_joint(1)"
+                    }
+                  ]
+                  name "gripper_right::paddle"
+                }
+              }
+            ]
+            name "gripper_right::outer"
+          }
+        }
+        DEF GRIPPER_LEFT_OUTER HingeJoint {
+          endPoint Solid {
+            translation -0.007 0 -0.008
+            children [
+              Shape {
+                appearance PBRAppearance {
+                  roughness 1
+                  metalness 0
+                }
+                geometry Mesh {
+                  url [
+                    "../protos/gripper/v2/gripper_left_outer.obj"
+                  ]
+                }
+                castShadows FALSE
+              }
+              DEF GRIPPER_LEFT_PADDLE HingeJoint {
+                endPoint Solid {
+                  children [
+                    Shape {
+                      appearance PBRAppearance {
+                        roughness 1
+                        metalness 0
+                      }
+                      geometry Mesh {
+                        url [
+                          "../protos/gripper/v2/gripper_left_paddle.obj"
+                        ]
+                      }
+                      castShadows FALSE
+                    }
+                  ]
+                  name "gripper_left::paddle"
+                }
+              }
+            ]
+            name "gripper_left::outer"
+          }
+        }
+        DEF GRIPPER_RIGHT_BASE_INNER HingeJoint {
+          jointParameters HingeJointParameters {
+            axis 0 1 0
+            anchor 0 0 -0.02
+          }
+          device [
+            RotationalMotor {
+              name "gripper_right::base_inner::rotational_motor"
+            }
+            PositionSensor {
+              name "gripper_right::base_inner::position_sensor"
+            }
+          ]
+          endPoint Solid {
+            translation -0.0035 0 -0.008
+            rotation 0 1 0 0
+            children [
+              DEF GRIPPER_RIGHT_INNER_SHAPE Shape {
+                appearance PBRAppearance {
+                  roughness 1
+                  metalness 0
+                }
+                geometry Mesh {
+                  url [
+                    "../protos/gripper/v2/gripper_right_inner.obj"
+                  ]
+                }
+                castShadows FALSE
+              }
+              DEF GRIPPER_RIGHT_INNER_PADDLE HingeJoint {
+                jointParameters HingeJointParameters {
+                  axis 0 1 0
+                  anchor 0.033 0 -0.038
+                }
+                endPoint SolidReference {
+                  solidName "gripper_right::paddle_joint(1)"
+                }
+              }
+            ]
+            name "gripper_right::inner_joint"
+          }
+        }
+        HingeJoint {
+        }
+      ]
+    }
+  ]
+  controller "gripper_test"
+}
