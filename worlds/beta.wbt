@@ -41,7 +41,7 @@ EXTERNPROTO "../protos/box_medium.proto"
 EXTERNPROTO "../protos/box_large.proto"
 EXTERNPROTO "../protos/ball_small.proto"
 EXTERNPROTO "../protos/ball_medium.proto"
-EXTERNPROTO "../protos/gripper.proto"
+EXTERNPROTO "../protos/gripper_v2.proto"
 
 WorldInfo {
   info [
@@ -50,8 +50,8 @@ WorldInfo {
   basicTimeStep 16
 }
 Viewpoint {
-  orientation -0.04033538779675993 -0.052182110716489684 0.997822671526588 4.965059966826659
-  position -2.099625949016481 -2.3401987018814134 0.29172513907576175
+  orientation -0.1833325985672251 -0.329287498695826 0.9262607092526568 5.200776425414183
+  position -2.727728070997395 -2.3019125064500483 1.0240866294460462
   exposure 0.5
 }
 TexturedBackground {
@@ -545,11 +545,13 @@ MyCobot280Pi {
   translation -1.54 -3.69 0.15
   controller "mycobot_enhance"
   gripper_slot [
-    gripper {
+    gripper_v2 {
     }
   ]
 }
 TurtleBot3Waffle {
+  hidden rotation_3 -0.4625644368716218 0.8864690379680419 0.014380071823665968 0.00024613471949708963
+  hidden rotation_4 -0.4625644368716218 0.8864690379680419 0.014380071823665968 0.00024613471949708963
   translation -1.43 -3.63 0
   controller "turtlebot_basic"
 }

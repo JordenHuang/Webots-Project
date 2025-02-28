@@ -3,12 +3,13 @@
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackground.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/floors/protos/RectangleArena.proto"
+EXTERNPROTO "../protos/MyCobot280Pi.proto"
 
 WorldInfo {
 }
 Viewpoint {
-  orientation -0.029760987381045382 -0.028263547981956735 0.9991573727324324 4.6600773656050585
-  position -0.4212742048654218 -0.4064915629856559 0.12524701340737215
+  orientation 0.6946247477642421 0.002173368829484469 -0.7193689847786003 3.137085393480561
+  position 0.09875832217184265 -0.04668648445071696 0.6362432069053574
 }
 TexturedBackground {
 }
@@ -52,7 +53,7 @@ Robot {
             }
           ]
           endPoint Solid {
-            translation -0.0035 0 -0.008
+            translation -0.005 0 -0.0095
             rotation 0 1 0 0
             children [
               Shape {
@@ -81,6 +82,7 @@ Robot {
                   }
                 ]
                 endPoint Solid {
+                  rotation 0 1 0 0
                   children [
                     DEF GRIPPER_RIGHT_PADDLE_SHAPE Shape {
                       appearance PBRAppearance {
@@ -110,27 +112,8 @@ Robot {
                       endPoint Solid {
                         translation 0.033 0 -0.038
                         rotation 0 1 0 0
-                        children [
-                          Shape {
-                            geometry Box {
-                              size 0.015 0.015 0.015
-                            }
-                          }
-                        ]
                         name "gripper_right::paddle_joint"
                       }
-                    }
-                    Solid {
-                      translation 0.033 0 -0.038
-                      rotation 0 1 0 0
-                      children [
-                        Shape {
-                          geometry Box {
-                            size 0.015 0.015 0.015
-                          }
-                        }
-                      ]
-                      name "gripper_right::paddle_joint(1)"
                     }
                   ]
                   name "gripper_right::paddle"
@@ -140,9 +123,71 @@ Robot {
             name "gripper_right::outer"
           }
         }
-        DEF GRIPPER_LEFT_OUTER HingeJoint {
+        DEF GRIPPER_RIGHT_BASE_INNER HingeJoint {
+          jointParameters HingeJointParameters {
+            axis 0 1 0
+            anchor -0.005 0 -0.0295
+          }
+          device [
+            RotationalMotor {
+              name "gripper_right::base_inner::rotational_motor"
+            }
+            PositionSensor {
+              name "gripper_right::base_inner::position_sensor"
+            }
+          ]
           endPoint Solid {
-            translation -0.007 0 -0.008
+            translation -0.005 0 -0.009500000000000001
+            rotation 0 1 0 0
+            children [
+              DEF GRIPPER_RIGHT_INNER_SHAPE Shape {
+                appearance PBRAppearance {
+                  roughness 1
+                  metalness 0
+                }
+                geometry Mesh {
+                  url [
+                    "../protos/gripper/v2/gripper_right_inner.obj"
+                  ]
+                }
+                castShadows FALSE
+              }
+              DEF GRIPPER_RIGHT_INNER_PADDLE HingeJoint {
+                jointParameters HingeJointParameters {
+                  axis 0 1 0
+                  anchor 0.033 0 -0.038
+                }
+                endPoint SolidReference {
+                  solidName "gripper_right::paddle_joint"
+                }
+              }
+              DEF GRIPPER_RIGHT_INNER_OUTER HingeJoint {
+                jointParameters HingeJointParameters {
+                  axis 0 1 0
+                }
+                endPoint SolidReference {
+                  solidName "gripper_right::outer"
+                }
+              }
+            ]
+            name "gripper_right::inner"
+          }
+        }
+        DEF GRIPPER_LEFT_BASE_OUTER HingeJoint {
+          jointParameters HingeJointParameters {
+            axis 0 1 0
+          }
+          device [
+            RotationalMotor {
+              name "gripper_left::base_outer::rotational_motor"
+            }
+            PositionSensor {
+              name "gripper_left::base_outer::position_sensor"
+            }
+          ]
+          endPoint Solid {
+            translation -0.006 0 -0.0095
+            rotation 0 1 0 0
             children [
               Shape {
                 appearance PBRAppearance {
@@ -156,8 +201,21 @@ Robot {
                 }
                 castShadows FALSE
               }
-              DEF GRIPPER_LEFT_PADDLE HingeJoint {
+              DEF GRIPPER_LEFT_OUTER_PADDLE HingeJoint {
+                jointParameters HingeJointParameters {
+                  axis 0 1 0
+                  anchor 0.04 0 -0.015
+                }
+                device [
+                  RotationalMotor {
+                    name "gripper_left::outer_paddle::rotational_motor"
+                  }
+                  PositionSensor {
+                    name "gripper_left::outer_paddle::position_sensor"
+                  }
+                ]
                 endPoint Solid {
+                  rotation 0 1 0 0
                   children [
                     Shape {
                       appearance PBRAppearance {
@@ -179,10 +237,159 @@ Robot {
             name "gripper_left::outer"
           }
         }
+        DEF GRIPPER_LEFT_BASE_INNER HingeJoint {
+          jointParameters HingeJointParameters {
+            axis 0 1 0
+            anchor -0.006 0 -0.0295
+          }
+          device [
+            RotationalMotor {
+              name "gripper_left::base_inner::rotational_motor"
+            }
+            PositionSensor {
+              name "gripper_left::base_inner::position_sensor"
+            }
+          ]
+          endPoint Solid {
+            translation -0.006 0 -0.009500000000000001
+            rotation 0 1 0 0
+            children [
+              DEF GRIPPER_LEFT_INNER_SHAPE Shape {
+                appearance PBRAppearance {
+                  roughness 1
+                  metalness 0
+                }
+                geometry Mesh {
+                  url [
+                    "../protos/gripper/v2/gripper_left_inner.obj"
+                  ]
+                }
+                castShadows FALSE
+              }
+            ]
+            name "gripper_left::inner"
+          }
+        }
+      ]
+    }
+  ]
+  physics Physics {
+  }
+  controller "gripper_test"
+}
+MyCobot280Pi {
+  translation 0 0 0.05
+  controller "mycobot_enhance"
+  gripper_slot [
+    Solid {
+      translation 2.644e-08 0.01 0.04
+      rotation 1 4.7949e-09 1.32679e-06 3.14159
+      children [
+        DEF GRIPPER_BASE_POSE Pose {
+          children [
+            DEF GRIPPER_BASE_SHAPE Shape {
+              appearance PBRAppearance {
+                roughness 1
+                metalness 0
+              }
+              geometry Mesh {
+              }
+              castShadows FALSE
+            }
+          ]
+        }
+        DEF GRIPPER_RIGHT_BASE_OUTER HingeJoint {
+          jointParameters HingeJointParameters {
+            axis 0 1 0
+          }
+          device [
+            RotationalMotor {
+              name "gripper_right::base_outer::rotational_motor"
+            }
+            PositionSensor {
+              name "gripper_right::base_outer::position_sensor"
+            }
+          ]
+          endPoint Solid {
+            translation -0.005 0 -0.009
+            rotation 0 1 0 0
+            children [
+              Shape {
+                appearance PBRAppearance {
+                  roughness 1
+                  metalness 0
+                }
+                geometry Mesh {
+                  url [
+                    "C:/Users/JordenHuang/webotsProject/mycobot_turtlebot/protos/gripper/v2/gripper_right_outer.obj"
+                  ]
+                }
+                castShadows FALSE
+              }
+              DEF GRIPPER_RIGHT_OUTER_PADDLE HingeJoint {
+                jointParameters HingeJointParameters {
+                  axis 0 1 0
+                  anchor 0.045 0 -0.015
+                }
+                device [
+                  RotationalMotor {
+                    name "gripper_right::outer_paddle::rotational_motor"
+                  }
+                  PositionSensor {
+                    name "gripper_right::outer_paddle::position_sensor"
+                  }
+                ]
+                endPoint Solid {
+                  rotation 0 1 0 0
+                  children [
+                    DEF GRIPPER_RIGHT_PADDLE_SHAPE Shape {
+                      appearance PBRAppearance {
+                        roughness 1
+                        metalness 0
+                      }
+                      geometry Mesh {
+                        url [
+                          "C:/Users/JordenHuang/webotsProject/mycobot_turtlebot/protos/gripper/v2/gripper_right_paddle.obj"
+                        ]
+                      }
+                      castShadows FALSE
+                    }
+                  ]
+                  name "gripper_right::paddle"
+                  boundingObject Pose {
+                    translation 0.027 0.003 -0.055
+                    children [
+                      Box {
+                        size 0.015 0.022 0.025
+                      }
+                    ]
+                  }
+                  physics Physics {
+                    density -1
+                    mass 0.001
+                  }
+                }
+              }
+            ]
+            name "gripper_right::outer"
+            boundingObject Pose {
+              translation 0.04 0.006 -0.015
+              children [
+                Box {
+                  size 0.01 0.015 0.01
+                }
+              ]
+            }
+            physics Physics {
+              density -1
+              mass 0.001
+            }
+          }
+        }
         DEF GRIPPER_RIGHT_BASE_INNER HingeJoint {
           jointParameters HingeJointParameters {
             axis 0 1 0
-            anchor 0 0 -0.02
+            anchor -0.005 0 -0.0295
           }
           device [
             RotationalMotor {
@@ -193,7 +400,7 @@ Robot {
             }
           ]
           endPoint Solid {
-            translation -0.0035 0 -0.008
+            translation -0.005000000000000005 0 -0.009500000000000001
             rotation 0 1 0 0
             children [
               DEF GRIPPER_RIGHT_INNER_SHAPE Shape {
@@ -203,28 +410,177 @@ Robot {
                 }
                 geometry Mesh {
                   url [
-                    "../protos/gripper/v2/gripper_right_inner.obj"
+                    "C:/Users/JordenHuang/webotsProject/mycobot_turtlebot/protos/gripper/v2/gripper_right_inner.obj"
                   ]
                 }
                 castShadows FALSE
               }
-              DEF GRIPPER_RIGHT_INNER_PADDLE HingeJoint {
+            ]
+            name "gripper_right::inner"
+            boundingObject Pose {
+              translation 0.022 0.006 -0.03
+              children [
+                Box {
+                  size 0.01 0.015 0.01
+                }
+              ]
+            }
+            physics Physics {
+              density -1
+              mass 0.001
+            }
+          }
+        }
+        DEF GRIPPER_LEFT_BASE_OUTER HingeJoint {
+          jointParameters HingeJointParameters {
+            axis 0 1 0
+          }
+          device [
+            RotationalMotor {
+              name "gripper_left::base_outer::rotational_motor"
+            }
+            PositionSensor {
+              name "gripper_left::base_outer::position_sensor"
+            }
+          ]
+          endPoint Solid {
+            translation -0.006 0 -0.0095
+            rotation 0 1 0 0
+            children [
+              Shape {
+                appearance PBRAppearance {
+                  roughness 1
+                  metalness 0
+                }
+                geometry Mesh {
+                  url [
+                    "C:/Users/JordenHuang/webotsProject/mycobot_turtlebot/protos/gripper/v2/gripper_left_outer.obj"
+                  ]
+                }
+                castShadows FALSE
+              }
+              DEF GRIPPER_LEFT_OUTER_PADDLE HingeJoint {
                 jointParameters HingeJointParameters {
                   axis 0 1 0
-                  anchor 0.033 0 -0.038
+                  anchor -0.04 0 -0.015
                 }
-                endPoint SolidReference {
-                  solidName "gripper_right::paddle_joint(1)"
+                device [
+                  RotationalMotor {
+                    name "gripper_left::outer_paddle::rotational_motor"
+                  }
+                  PositionSensor {
+                    name "gripper_left::outer_paddle::position_sensor"
+                  }
+                ]
+                endPoint Solid {
+                  rotation 0 1 0 0
+                  children [
+                    DEF GRIPPER_LEFT_PADDLE_SHAPE Shape {
+                      appearance PBRAppearance {
+                        roughness 1
+                        metalness 0
+                      }
+                      geometry Mesh {
+                        url [
+                          "C:/Users/JordenHuang/webotsProject/mycobot_turtlebot/protos/gripper/v2/gripper_left_paddle.obj"
+                        ]
+                      }
+                      castShadows FALSE
+                    }
+                  ]
+                  name "gripper_left::paddle"
+                  boundingObject Pose {
+                    translation -0.028 0.003 -0.055
+                    children [
+                      Box {
+                        size 0.015 0.022 0.025
+                      }
+                    ]
+                  }
+                  physics Physics {
+                    density -1
+                    mass 0.001
+                  }
                 }
               }
             ]
-            name "gripper_right::inner_joint"
+            name "gripper_left::outer"
+            boundingObject Pose {
+              translation -0.042 0.006 -0.015
+              children [
+                Box {
+                  size 0.01 0.015 0.01
+                }
+              ]
+            }
+            physics Physics {
+              density -1
+              mass 0.001
+            }
           }
         }
-        HingeJoint {
+        DEF GRIPPER_LEFT_BASE_INNER HingeJoint {
+          jointParameters HingeJointParameters {
+            axis 0 1 0
+            anchor -0.006 0 -0.0295
+          }
+          device [
+            RotationalMotor {
+              name "gripper_left::base_inner::rotational_motor"
+            }
+            PositionSensor {
+              name "gripper_left::base_inner::position_sensor"
+            }
+          ]
+          endPoint Solid {
+            translation -0.006 0 -0.009500000000000001
+            rotation 0 1 0 0
+            children [
+              DEF GRIPPER_LEFT_INNER_SHAPE Shape {
+                appearance PBRAppearance {
+                  roughness 1
+                  metalness 0
+                }
+                geometry Mesh {
+                  url [
+                    "C:/Users/JordenHuang/webotsProject/mycobot_turtlebot/protos/gripper/v2/gripper_left_inner.obj"
+                  ]
+                }
+                castShadows FALSE
+              }
+            ]
+            name "gripper_left::inner"
+            boundingObject Pose {
+              translation -0.022 0.006 -0.03
+              children [
+                Box {
+                  size 0.01 0.015 0.01
+                }
+              ]
+            }
+            physics Physics {
+              density -1
+              mass 0.001
+            }
+          }
         }
       ]
+      name "GripperV2"
+      boundingObject Pose {
+        translation -0.005 0.025 -0.005
+        children [
+          Box {
+            size 0.06 0.06 0.065
+          }
+        ]
+      }
+      physics Physics {
+        density -1
+        mass 0.01
+        centerOfMass [
+          0 -1 0.07
+        ]
+      }
     }
   ]
-  controller "gripper_test"
 }

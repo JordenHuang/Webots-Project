@@ -2,6 +2,7 @@ from controller import Robot
 from controller import wb, PositionSensor
 from controller import Supervisor, Node
 from controller import Keyboard
+from controller import Joystick
 # import math
 import time
 
@@ -28,6 +29,13 @@ wheel_left.setVelocity(0.0)
 wheel_right.setVelocity(0.0)
 WHEEL_MAX_SPEED = 6.28
 
+# # Joystick
+# joystick = Joystick()
+# if not joystick.isConnected():
+#     print("No joystick is connected")
+#     exit(1)
+# print(joystick.model)
+# joystick.enable(TIMESTEP)
 
 while turtlebot.step(TIMESTEP) != -1:
     key = None

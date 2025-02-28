@@ -21,8 +21,13 @@ joints = []
 for i in range(6):
     joints.append(myCobot.getDevice(f"joint{i}_rotational_motor"))
 
-gripper_left = myCobot.getDevice("gripper_left_arm_rotational_motor")
-gripper_right = myCobot.getDevice("gripper_right_arm_rotational_motor")
+gripper_right_base_outer = myCobot.getDevice("gripper_right::base_outer::rotational_motor")
+gripper_right_outer_paddle = myCobot.getDevice( "gripper_right::outer_paddle::rotational_motor")
+gripper_right_inner = myCobot.getDevice("gripper_right::base_inner::rotational_motor")
+
+gripper_left_base_outer = myCobot.getDevice("gripper_left::base_outer::rotational_motor")
+gripper_left_outer_paddle = myCobot.getDevice( "gripper_left::outer_paddle::rotational_motor")
+gripper_left_inner = myCobot.getDevice("gripper_left::base_inner::rotational_motor")
 
 
 def mycobot_send_angles(degrees: list, speed=0.05):
@@ -48,6 +53,44 @@ J5:	-165 ~ 165 (2.8797908333333333)
 J6:	-180 ~ 180 (3.14159)
 '''
 
+
+def mycobot_gripper_send_angle(degree: int, speed=0.007):
+    rad_right = degree * (PI / 180)  # Convert degrees to radians
+    current_angle_right = gripper_right_base_outer.getTargetPosition()  # Get current joint angles
+
+    rad_left = (-degree) * (PI / 180)  # Convert degrees to radians
+    current_angle_left = gripper_left_base_outer.getTargetPosition()  # Get current joint angles
+
+    flag = False
+    while True:  # Loop until close enough
+        flag = False
+        # Right
+        if abs(current_angle_right - rad_right) > 0.01:
+            diff = rad_right - current_angle_right
+            step = speed if abs(diff) > speed else abs(diff)  # Step should not exceed remaining distance
+            current_angle_right += step * (1 if diff > 0 else -1)  # Move in the correct direction
+
+            gripper_right_base_outer.setPosition(current_angle_right)  # Apply new position
+            gripper_right_outer_paddle.setPosition(-current_angle_right)  # Apply new position
+            gripper_right_inner.setPosition(current_angle_right)  # Apply new position
+        else:
+            flag = True
+
+        # Left
+        if abs(current_angle_left - rad_left) > 0.01:
+            diff = rad_left - current_angle_left
+            step = speed if abs(diff) > speed else abs(diff)  # Step should not exceed remaining distance
+            current_angle_left += step * (1 if diff > 0 else -1)  # Move in the correct direction
+
+            gripper_left_base_outer.setPosition(current_angle_left)  # Apply new position
+            gripper_left_outer_paddle.setPosition(-current_angle_left)  # Apply new position
+            gripper_left_inner.setPosition(current_angle_left)  # Apply new position
+        else:
+            if flag == True:
+                break
+        
+        myCobot.step(2*TIMESTEP)  # Small delay to control speed
+
 # You should insert a getDevice-like function in order to get the
 # instance of a device of the robot. Something like:
 #  motor = robot.getDevice('motorname')
@@ -57,8 +100,11 @@ J6:	-180 ~ 180 (3.14159)
 # Main loop:
 # - perform simulation steps until Webots is stopping the controller
 mode = 0
+
+# Initial position
 degrees = [0, -135, 150, -120, 90, 0]
 mycobot_send_angles(degrees)
+
 while myCobot.step(TIMESTEP) != -1:
     # Read the sensors:
     # Enter here functions to read sensor data, like:
@@ -108,24 +154,26 @@ while myCobot.step(TIMESTEP) != -1:
         # degrees = [0, 100, 15, -25, 165, 0]
         # Near target
         degrees = [0, 110, 5, -15, 165, 0]
-        mycobot_send_angles(degrees)
+        mycobot_send_angles(degrees, 0.02)
         mode = 0
 
     elif mode == 4:
-        deg = 10
-        gripper_left.setPosition(deg * PI / 180)
-        gripper_right.setPosition(deg * PI / 180)
+        deg = 30
+        mycobot_gripper_send_angle(deg)
+        # gripper_left.setPosition(deg * PI / 180)
+        # gripper_right.setPosition(deg * PI / 180)
         mode = 0
     elif mode == 5:
-        deg = 0
-        gripper_left.setPosition(deg * PI / 180)
-        gripper_right.setPosition(deg * PI / 180)
+        deg = -30
+        mycobot_gripper_send_angle(deg)
+        # gripper_left.setPosition(deg * PI / 180)
+        # gripper_right.setPosition(deg * PI / 180)
         degrees = [0, 127, -5, -25, 165, 0]
         mode = 0
     
     elif mode == 6:
         degrees = [0, 80, 15, -25, 165, 0]
-        mycobot_send_angles(degrees)
+        mycobot_send_angles(degrees, 0.01)
         mode = 0
 
 
