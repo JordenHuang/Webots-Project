@@ -1,0 +1,16 @@
+{
+    "configurations": [
+        {
+            "name": "Webots",
+            "compilerPath": "C:\\Program Files\\Webots\\msys64\\mingw64\\bin\\gcc.exe",
+            "includePath": [
+                "C:/Program Files/Webots/include/controller/c",
+                // "C:/Program Files/Webots/include/controller/cpp",
+                "${workspaceFolder}/"
+            ],
+            "cStandard": "c99"
+        }
+    ],
+    "version": 4,
+    "enableConfigurationSquiggles": true
+}
