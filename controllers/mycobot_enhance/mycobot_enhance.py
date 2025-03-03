@@ -4,6 +4,7 @@ from controller import Robot
 from controller import wb, PositionSensor
 from controller import Supervisor, Node
 from controller import Keyboard
+from controller import Joystick
 # import math
 import time
 
@@ -172,7 +173,7 @@ while myCobot.step(TIMESTEP) != -1:
         mode = 0
     
     elif mode == 6:
-        degrees = [0, 80, 15, -25, 165, 0]
+        degrees = [0, 80, 15, -35, 165, 0]
         mycobot_send_angles(degrees, 0.01)
         mode = 0
 
