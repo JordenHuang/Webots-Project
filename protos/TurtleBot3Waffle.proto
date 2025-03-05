@@ -20,6 +20,7 @@ PROTO TurtleBot3Waffle [
   field SFInt32      emitter_channel      1            # Is `Emitter.channel`.
   field SFInt32      receiver_channel     1            # Is `Receiver.channel`.
   field  SFBool      selfCollision        FALSE        # Is `Robot.selfCollision`.
+  field  MFNode      arm_slot             []           # Put the arm here
 ]
 
 {
@@ -634,6 +635,13 @@ PROTO TurtleBot3Waffle [
       DEF TURTLEBOT_EMITTER Emitter {
         channel IS emitter_channel
       }
+      DEF ARM_SLOT Group {
+        children [
+          Pose {
+            children IS arm_slot
+          }
+        ]
+      }
     ]
     name IS name
     boundingObject Group {
@@ -658,7 +666,7 @@ PROTO TurtleBot3Waffle [
     }
     physics Physics {
       density -1
-      mass 0.825735
+      mass 1.825735
       centerOfMass [
         -0.035 0 0.03
       ]

@@ -39,9 +39,10 @@ EXTERNPROTO "../protos/ball_large.proto"
 EXTERNPROTO "../protos/KukaBox.proto"
 EXTERNPROTO "../protos/box_medium.proto"
 EXTERNPROTO "../protos/box_large.proto"
-EXTERNPROTO "../protos/ball_small.proto"
 EXTERNPROTO "../protos/ball_medium.proto"
 EXTERNPROTO "../protos/gripper_v2.proto"
+EXTERNPROTO "../protos/MyCobot280Pi_solid.proto"
+EXTERNPROTO "../protos/ball_small.proto"
 
 WorldInfo {
   info [
@@ -50,8 +51,8 @@ WorldInfo {
   basicTimeStep 16
 }
 Viewpoint {
-  orientation -0.22516558451114485 -0.1668708414323801 0.9599242583826102 4.378280716342092
-  position -1.0914616672256403 -0.8719781580996792 1.5485188640836518
+  orientation -0.22100301321526208 -0.29651197808157714 0.9291061914571042 4.931018318497668
+  position -2.5544593036008827 -1.176520657873455 0.9268108054642197
   exposure 0.5
 }
 TexturedBackground {
@@ -551,7 +552,21 @@ MyCobot280Pi {
 }
 TurtleBot3Waffle {
   translation -1.43 -3.63 0
-  controller "turtlebot_basic"
+}
+TurtleBot3Waffle {
+  translation -1.77 -2.51 0
+  name "TurCobot"
+  controller "turcobot_control"
+  camera_width 256
+  camera_height 128
+  arm_slot [
+    DEF BASE MyCobot280Pi_solid {
+      gripper_slot [
+        gripper_v2 {
+        }
+      ]
+    }
+  ]
 }
 KukaBox {
   translation -1.77 -3.72 0.01
@@ -563,7 +578,7 @@ box_large {
   translation -2.06 -3.1 0.06
 }
 ball_small {
-  translation -2.42 -3.58 0.01
+  translation -2.3 -2.58 0
 }
 ball_medium {
   translation -2.54 -3.83 0.03

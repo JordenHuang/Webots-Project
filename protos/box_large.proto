@@ -24,6 +24,9 @@ PROTO box_large [
     ]
     name IS name
     boundingObject USE BOX_LARGE_SHAPE
-    physics Physics {}
+    physics Physics {
+      density -1
+      mass 0.5
+    }
   }
 }

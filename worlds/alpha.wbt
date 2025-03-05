@@ -4,12 +4,15 @@ EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/project
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/floors/protos/RectangleArena.proto"
 EXTERNPROTO "../protos/MyCobot280Pi.proto"
+EXTERNPROTO "../protos/TurtleBot3Waffle.proto"
+EXTERNPROTO "../protos/MyCobot280Pi_solid.proto"
+EXTERNPROTO "../protos/gripper_v2.proto"
 
 WorldInfo {
 }
 Viewpoint {
-  orientation 0.6946247477642421 0.002173368829484469 -0.7193689847786003 3.137085393480561
-  position 0.09875832217184265 -0.04668648445071696 0.6362432069053574
+  orientation 0.2440823485155742 0.387015201453318 -0.8891811069670619 1.2338387749053277
+  position -0.680831635853366 2.4830603946281 0.9908052042111242
 }
 TexturedBackground {
 }
@@ -581,6 +584,21 @@ MyCobot280Pi {
           0 -1 0.07
         ]
       }
+    }
+  ]
+}
+TurtleBot3Waffle {
+  hidden rotation_3 -0.4625644367367229 0.8864690380384141 0.014380071824807548 0.00024613470145456285
+  hidden rotation_4 -0.4625644367367229 0.8864690380384141 0.014380071824807548 0.00024613470145456285
+  translation 0 1.4 0
+  controller "turcobot_control"
+  arm_slot [
+    DEF BASE MyCobot280Pi_solid {
+      translation -0.12 -0.06 0.12
+      gripper_slot [
+        gripper_v2 {
+        }
+      ]
     }
   ]
 }

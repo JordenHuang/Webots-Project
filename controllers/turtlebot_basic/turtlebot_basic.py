@@ -43,7 +43,7 @@ turtlebot.step(TIMESTEP)
 
 if not joystick.isConnected():
     print("No joystick is connected")
-    exit(1)
+    print("Use keyboard to control")
 else:
     JOYSTICK_ENABLED = True
     print("Joystick connected")

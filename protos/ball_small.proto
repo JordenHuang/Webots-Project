@@ -24,6 +24,9 @@ PROTO ball_small [
     ]
     name IS name
     boundingObject USE BALL_SMALL_SHAPE
-    physics Physics {}
+    physics Physics {
+      density -1
+      mass 0.075
+    }
   }
 }
