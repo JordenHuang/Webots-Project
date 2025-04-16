@@ -6,13 +6,16 @@ from controller import Joystick
 # import math
 import time
 
+import cv2
+idx = 0
+
 ''' Joint angle constrants
 J1: -168 ~ 168 (2.9321506666666663)
-J2:	-135 ~ 135 (2.3561924999999997)
-J3:	-150 ~ 150 (2.6179916666666667)
-J4:	-145 ~ 145 (2.530725277777778)
-J5:	-165 ~ 165 (2.8797908333333333)
-J6:	-180 ~ 180 (3.14159)
+J2: -135 ~ 135 (2.3561924999999997)
+J3: -150 ~ 150 (2.6179916666666667)
+J4: -145 ~ 145 (2.530725277777778)
+J5: -165 ~ 165 (2.8797908333333333)
+J6: -180 ~ 180 (3.14159)
 '''
 
 PI = 3.14159
@@ -152,6 +155,12 @@ while turtlebot.step(TIMESTEP) != -1:
     else:
         wheel_left.setVelocity(0.0)
         wheel_right.setVelocity(0.0)
+
+    if key == ord('X'):
+        camera_left.saveImage(f"cl_{idx}.png", None)
+        camera_right.saveImage(f"cr_{idx}.png", None)
+        print("Image saved")
+        idx += 1
 
     # myCobot and gripper
     if key == ord('0'):
