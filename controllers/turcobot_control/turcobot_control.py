@@ -6,7 +6,7 @@ from controller import Joystick
 # import math
 import time
 
-import cv2
+# import cv2
 idx = 0
 
 ''' Joint angle constrants
@@ -133,6 +133,7 @@ degrees = [0, -135, 150, -120, 90, 0]
 mycobot_send_angles(degrees)
 
 mode = 0
+x_pressed = False
 
 # Main loop
 while turtlebot.step(TIMESTEP) != -1:
@@ -157,10 +158,14 @@ while turtlebot.step(TIMESTEP) != -1:
         wheel_right.setVelocity(0.0)
 
     if key == ord('X'):
-        camera_left.saveImage(f"cl_{idx}.png", None)
-        camera_right.saveImage(f"cr_{idx}.png", None)
-        print("Image saved")
-        idx += 1
+        if not x_pressed:
+            x_pressed = True
+            camera_left.saveImage(f"images/cl_{idx}.png", None)
+            camera_right.saveImage(f"images/cr_{idx}.png", None)
+            print(f"Image {idx} saved")
+            idx += 1
+    else:
+        x_pressed = False
 
     # myCobot and gripper
     if key == ord('0'):
