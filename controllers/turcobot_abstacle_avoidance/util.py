@@ -33,13 +33,13 @@ def findConsecutive(row):
             continue
 
         start = i
-        while row[i+1] == row[i]:
+        while i+1 < len(row) and row[i+1] == row[i]:
             i += 1
         end = i
         consecutiveList.append((start, end))
     return consecutiveList
 
-def calcMiddle(l):
+def calcMiddle(l, rowIdx):
     if len(l) > 0:
         maxIdx = 0
         maxValue = l[0][1]- l[0][0]
@@ -72,7 +72,7 @@ if __name__ == "__main__":
     for rowIdx in range(len(image)):
         l = findConsecutive(image[rowIdx])
         # print(l)
-        dot = calcMiddle(l)
+        dot = calcMiddle(l, rowIdx)
         if dot:
             dots.append(dot)
 
