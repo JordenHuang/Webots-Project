@@ -6,6 +6,9 @@ from PIL import Image
 
 from myModel import FloorSegmentationNet
 
+
+IMAGE_RESIZE_TO = (256, 256)
+
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 # model = torch.load(
@@ -14,14 +17,16 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 #     weights_only=False
 # )
 # model_name = "result_model_0421_allDataTogether_100epoch.pth"
-model_name = "result_model_0421_allDataTogether.pth"
+# model_name = "result_model_0421_allDataTogether.pth"
+# model_name = "result_model.pth"
+model_name = "result_model(1).pth"
 model = FloorSegmentationNet()
 model.load_state_dict(torch.load(model_name, map_location=device))
 model.eval()
 
 # Common transform for images
 img_transform = transforms.Compose([
-    transforms.Resize((128, 256)),
+    transforms.Resize(IMAGE_RESIZE_TO),
     transforms.ToTensor(),
     transforms.Normalize(mean=[0.485, 0.456, 0.406],  # From ImageNet
                          std=[0.229, 0.224, 0.225]),
@@ -48,7 +53,7 @@ def predict_image(model, image_path=None, image_array=None, show=False):
     if show == True:
         plt.figure(figsize=(10,4))
         plt.subplot(1, 2, 1)
-        plt.imshow(image.resize((256, 128)))
+        plt.imshow(image.resize(IMAGE_RESIZE_TO))
         plt.title("Input Image")
 
         plt.subplot(1, 2, 2)

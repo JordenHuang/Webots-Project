@@ -108,12 +108,12 @@ while turtlebot.step(TIMESTEP) != -1:
                     dots.append(dot)
 
             # Some parameters
-            row_line_ok = 90
-            row_line_back = 110
-            range_accept = 20
+            row_line_ok = 170# 128 + 32
+            row_line_back = 190
+            range_accept = 3#80
             image_middle_col = int(image.shape[1]/2)
             # turn_ratio = cpDot[0] / (image_middle_col/1.25-range_accept)
-            turn_ratio = TURN_RATIO
+            turn_ratio = TURN_RATIO / 2
 
             # Find the controlling point
             cp = []
@@ -142,27 +142,31 @@ while turtlebot.step(TIMESTEP) != -1:
 
                 # Should go back
                 if cpDot[1][1] > row_line_back:
-                    print("To back")
-                    wheel_left.setVelocity(WHEEL_MAX_SPEED * FORWARD_RATIO * 0.5)
-                    # wheel_right.setVelocity(WHEEL_MAX_SPEED * FORWARD_RATIO * 0.5)
-                    wheel_right.setVelocity(WHEEL_MAX_SPEED * -(turn_ratio))
+                    print("To back left (head to right)")
+                    # for _ in range(1):
+                    wheel_left.setVelocity(WHEEL_MAX_SPEED * FORWARD_RATIO / 5)
+                    wheel_right.setVelocity(WHEEL_MAX_SPEED * -FORWARD_RATIO / 5)
+                        # wheel_left.setVelocity(WHEEL_MAX_SPEED * (turn_ratio))
+                        # wheel_right.setVelocity(WHEEL_MAX_SPEED * -(turn_ratio))
+                        # turtlebot.step(TIMESTEP)
                 # Should go left more
                 elif cpDot[1][0] < (image_middle_col-range_accept):
                     print("To left")
                     wheel_left.setVelocity(WHEEL_MAX_SPEED * -(turn_ratio))
-                    wheel_right.setVelocity(WHEEL_MAX_SPEED * -FORWARD_RATIO/5 * 0.5)
+                    wheel_right.setVelocity(WHEEL_MAX_SPEED * -FORWARD_RATIO / 5)
                 # Should go right more
                 elif cpDot[1][0] > (image_middle_col+range_accept):
                     print("To right")
-                    wheel_left.setVelocity(WHEEL_MAX_SPEED * -FORWARD_RATIO/5 * 0.5)
+                    wheel_left.setVelocity(WHEEL_MAX_SPEED * -FORWARD_RATIO / 5)
                     wheel_right.setVelocity(WHEEL_MAX_SPEED * -(turn_ratio))
                 else:
                     print("To front")
-                    wheel_left.setVelocity(WHEEL_MAX_SPEED * -FORWARD_RATIO * 0.5)
-                    wheel_right.setVelocity(WHEEL_MAX_SPEED * -FORWARD_RATIO * 0.5)
+                    wheel_left.setVelocity(WHEEL_MAX_SPEED * -FORWARD_RATIO)
+                    wheel_right.setVelocity(WHEEL_MAX_SPEED * -FORWARD_RATIO)
             else:
-                wheel_left.setVelocity(WHEEL_MAX_SPEED * FORWARD_RATIO * 0.5)
-                wheel_right.setVelocity(WHEEL_MAX_SPEED * FORWARD_RATIO * 0.5)
+                # wheel_left.setVelocity(WHEEL_MAX_SPEED * FORWARD_RATIO * 0.5)
+                # wheel_right.setVelocity(WHEEL_MAX_SPEED * FORWARD_RATIO * 0.5)
+                pass
 
 
 cv2.destroyAllWindows()

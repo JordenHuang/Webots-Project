@@ -7,6 +7,8 @@
 
 import cv2
 import numpy as np
+from sys import exit
+from time import sleep
 
 def convertImage(path, outPath):
     image = cv2.imread(path)
@@ -36,7 +38,8 @@ def findConsecutive(row):
         while i+1 < len(row) and row[i+1] == row[i]:
             i += 1
         end = i
-        consecutiveList.append((start, end))
+        if end - start >= 160:
+            consecutiveList.append((start, end))
     return consecutiveList
 
 def calcMiddle(l, rowIdx):
@@ -57,11 +60,15 @@ def calcMiddle(l, rowIdx):
 if __name__ == "__main__":
     # convertImage("cl_0_png.rf.231677ca9a6d2b14b6757127cad860b6_mask.png", "maskImage.png")
     # convertImage("cl_1_png.rf.088f701647b8fb6d7a924ddc3ba6b764_mask.png", "maskImage2.png")
+    # convertImage("train_006_mask.png", "maskImage2.png")
 
-    image = readImage("maskImage.png")
+    # image = readImage("maskImage.png")
     # image = readImage("maskImage2.png")
+    image = readImage("/home/jordenhuang/programs/lab246/yolov5/road/image/road_mask.png")
     # cv2.imshow("window", image)
     # cv2.waitKey(0)
+
+    image = cv2.resize(image, (256, 256))
 
     # create empty numpy array
     middleLineImage = np.copy(image)
@@ -89,12 +96,16 @@ if __name__ == "__main__":
     for dot in dots:
         if dot[1] > 77: # Let the controlling point set between row 78 and 254
             cp.append([abs(int(image.shape[1] / 2 - dot[0])), dot])
-    cpDot = max(cp, key=lambda x: x[0])
-    # Draw the controlling point
-    cv2.circle(middleLineImage, cpDot[1], 3, (255, 0, 255), cv2.FILLED)
-    print(f"Controlling point: {cpDot[1]}, distance from middle: {cpDot[0]}")
+    if len(cp) != 0:
+        cpDot = max(cp, key=lambda x: x[0])
+        # Draw the controlling point
+        cv2.circle(middleLineImage, cpDot[1], 3, (255, 0, 255), cv2.FILLED)
+        print(f"Controlling point: {cpDot[1]}, distance from middle: {cpDot[0]}")
 
-    # Display the result
-    # cv2.imshow("window", image)
-    cv2.imshow("result", middleLineImage)
-    cv2.waitKey(0)
+        # Display the result
+        # cv2.imshow("window", image)
+        cv2.imshow("result", middleLineImage)
+        while cv2.waitKey(0) != ord('q'):
+            sleep(0.5)
+        cv2.destroyAllWindows()
+    
