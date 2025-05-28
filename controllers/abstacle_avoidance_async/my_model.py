@@ -49,7 +49,7 @@ img_transform = transforms.Compose([
                          std=[0.229, 0.224, 0.225]),
 ])
 
-model_name = "result_model_0507.pth"
+model_name = "../floor_seg_model/result_model_0507.pth"
 model = FloorSegmentationNet()
 model.load_state_dict(torch.load(model_name, map_location=device))
 model.eval()
