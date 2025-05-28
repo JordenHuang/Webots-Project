@@ -7,6 +7,8 @@ centralWidgetVisible: 1
 orthographicViewHeight: 1
 textFiles: -1
 consoles: Console:All:All
+renderingDevicePerspectives: MyCreate:camera_left;1;0.449219;0;0
+renderingDevicePerspectives: MyCreate:camera_right;1;0.445313;0.348148;0
 renderingDevicePerspectives: TurtleBot3Burger:camera;1;0.1875;0;0
 renderingDevicePerspectives: TurtleBot:camera_left;1;0.433594;0.339108;0
 renderingDevicePerspectives: TurtleBot:camera_right;1;0.433594;0.00125;0
