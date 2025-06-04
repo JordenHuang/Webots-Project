@@ -748,7 +748,7 @@ Robot {
           translation 0.14 -0.05 0.11
           rotation 0 -1 0 -5.307179586466759e-06
           children [
-            Pose {
+            DEF CAMERA_POSE Pose {
               rotation 0 1 0 1.5708
               children [
                 DEF CAMERA_SHAPE Shape {
@@ -775,13 +775,8 @@ Robot {
         }
         Camera {
           translation 0.14 0.05 0.11
-          rotation 0 -1 0 -5.307179586466759e-06
           children [
-            Pose {
-              children [
-                USE CAMERA_SHAPE
-              ]
-            }
+            USE CAMERA_POSE
           ]
           name "camera_left"
           fieldOfView IS camera_fieldOfView
