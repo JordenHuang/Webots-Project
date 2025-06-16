@@ -14,6 +14,13 @@ PROTO MyCreate [
   field SFString   customData      ""                       # Is `Robot.customData`.
   field SFBool     supervisor      FALSE                    # Is `Robot.supervisor`.
   field SFBool     synchronization TRUE                     # Is `Robot.synchronization`.
+  field SFFloat      camera_fieldOfView   0.84         # Is `Camera.fieldOfView`.
+  field SFInt32      camera_width         256          # Is `Camera.width`.
+  field SFInt32      camera_height        128           # Is `Camera.height`.
+  field SFBool       camera_antiAliasing  FALSE        # Is `Camera.antiAliasing`.
+  field SFRotation   camera_rotation      0 0 1 3.14   # Is `Camera.rotation`. Interesting setup: set `0 1 0 0.47` in order to simulate the linear camera mode.
+  field SFFloat      camera_noise         0.0          # Is `Camera.noise`.
+  field SFFloat      camera_motionBlur    0.0          # Is `Camera.motionBlur`.
   field MFNode     bodySlot        []                       # Extends the robot with new nodes in the body slot.
 ]
 {
@@ -654,7 +661,7 @@ Robot {
                   }
                 }
               ]
-              name "STAND_RIGHT_FRONT"
+              name "stand_right_front_1"
               boundingObject USE PLATE_1_STAND_SHAPE
               physics USE PLATE_1_PHYSICS
             }
@@ -663,7 +670,7 @@ Robot {
               children [
                 USE PLATE_1_STAND_SHAPE
               ]
-              name "STAND_RIGHT_back"
+              name "stand_right_back_1"
               boundingObject USE PLATE_1_STAND_SHAPE
               physics USE PLATE_1_PHYSICS
             }
@@ -672,7 +679,7 @@ Robot {
               children [
                 USE PLATE_1_STAND_SHAPE
               ]
-              name "STAND_LEFT_FRONT"
+              name "stand_left_front_1"
               boundingObject USE PLATE_1_STAND_SHAPE
               physics USE PLATE_1_PHYSICS
             }
@@ -681,7 +688,7 @@ Robot {
               children [
                 USE PLATE_1_STAND_SHAPE
               ]
-              name "STAND_left_back"
+              name "stand_left_back_1"
               boundingObject USE PLATE_1_STAND_SHAPE
               physics USE PLATE_1_PHYSICS
             }
@@ -700,7 +707,7 @@ Robot {
                   }
                 }
               ]
-              name "STAND_RIGHT_FRONT(1)"
+              name "stand_right_front_2"
               boundingObject USE PLATE_2_STAND_SHAPE
               physics USE PLATE_1_PHYSICS
             }
@@ -709,7 +716,7 @@ Robot {
               children [
                 USE PLATE_2_STAND_SHAPE
               ]
-              name "STAND_RIGHT_back(1)"
+              name "stand_right_back_2"
               boundingObject USE PLATE_2_STAND_SHAPE
               physics USE PLATE_1_PHYSICS
             }
@@ -718,7 +725,7 @@ Robot {
               children [
                 USE PLATE_2_STAND_SHAPE
               ]
-              name "STAND_LEFT_FRONT(1)"
+              name "stand_left_front_2"
               boundingObject USE PLATE_2_STAND_SHAPE
               physics USE PLATE_1_PHYSICS
             }
@@ -727,11 +734,57 @@ Robot {
               children [
                 USE PLATE_2_STAND_SHAPE
               ]
-              name "STAND_left_back(1)"
+              name "stand_left_back_2"
               boundingObject USE PLATE_2_STAND_SHAPE
               physics USE PLATE_1_PHYSICS
             }
           ]
+        }
+      ]
+    }
+    DEF CAMERAS Pose {
+      children [
+        Camera {
+          translation 0.14 -0.05 0.11
+          rotation 0 -1 0 -5.307179586466759e-06
+          children [
+            DEF CAMERA_POSE Pose {
+              rotation 0 1 0 1.5708
+              children [
+                DEF CAMERA_SHAPE Shape {
+                  appearance PBRAppearance {
+                    baseColor 0.3 0.3 0.3
+                    roughness 1
+                    metalness 0
+                  }
+                  geometry Cylinder {
+                    height 0.01
+                    radius 0.008
+                  }
+                }
+              ]
+            }
+          ]
+          name "camera_right"
+          fieldOfView IS camera_fieldOfView
+          width IS camera_width
+          height IS camera_height
+          antiAliasing IS camera_antiAliasing
+          motionBlur IS camera_motionBlur
+          noise IS camera_noise
+        }
+        Camera {
+          translation 0.14 0.05 0.11
+          children [
+            USE CAMERA_POSE
+          ]
+          name "camera_left"
+          fieldOfView IS camera_fieldOfView
+          width IS camera_width
+          height IS camera_height
+          antiAliasing IS camera_antiAliasing
+          motionBlur IS camera_motionBlur
+          noise IS camera_noise
         }
       ]
     }
