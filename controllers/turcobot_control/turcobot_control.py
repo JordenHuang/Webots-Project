@@ -157,15 +157,15 @@ while turtlebot.step(TIMESTEP) != -1:
         wheel_left.setVelocity(0.0)
         wheel_right.setVelocity(0.0)
 
-    if key == ord('X'):
-        if not x_pressed:
-            x_pressed = True
-            camera_left.saveImage(f"images/cl_{idx}.png", None)
-            camera_right.saveImage(f"images/cr_{idx}.png", None)
-            print(f"Image {idx} saved")
-            idx += 1
-    else:
-        x_pressed = False
+    # if key == ord('X'):
+    #     if not x_pressed:
+    #         x_pressed = True
+    #         camera_left.saveImage(f"images/cl_{idx}.png", None)
+    #         camera_right.saveImage(f"images/cr_{idx}.png", None)
+    #         print(f"Image {idx} saved")
+    #         idx += 1
+    # else:
+    #     x_pressed = False
 
     # myCobot and gripper
     if key == ord('0'):

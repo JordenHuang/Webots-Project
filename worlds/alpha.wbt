@@ -13,7 +13,7 @@ WorldInfo {
 }
 Viewpoint {
   orientation -0.29217199490989193 -0.28535101929079604 0.9128035501574683 4.597797036424708
-  position -0.960126182677383 1.4979297977157584 0.8057183693812302
+  position -0.9377187692364519 2.447010055442575 1.4828205576209366
 }
 TexturedBackground {
 }
@@ -1401,7 +1401,7 @@ Robot {
     density -1
     mass 1.8
   }
-  controller "myCreate_controller"
+  controller "myCreate_with_arm"
 }
 KukaBox {
   translation -0.74 0.55 0.01

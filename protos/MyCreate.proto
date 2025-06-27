@@ -21,7 +21,8 @@ PROTO MyCreate [
   field SFRotation   camera_rotation      0 0 1 3.14   # Is `Camera.rotation`. Interesting setup: set `0 1 0 0.47` in order to simulate the linear camera mode.
   field SFFloat      camera_noise         0.0          # Is `Camera.noise`.
   field SFFloat      camera_motionBlur    0.0          # Is `Camera.motionBlur`.
-  field MFNode     bodySlot        []                       # Extends the robot with new nodes in the body slot.
+  # field MFNode     bodySlot        []                       # Extends the robot with new nodes in the body slot.
+  field  MFNode      arm_slot             []           # Put the arm here
 ]
 {
 Robot {
@@ -711,12 +712,8 @@ Robot {
     }
     DEF ARM_SLOT Group {
       children [
-        DEF BASE MyCobot280Pi_solid {
-          translation 0.09 0 0.08
-          gripper_slot [
-            gripper_v2 {
-            }
-          ]
+        Pose {
+          children IS arm_slot
         }
       ]
     }
