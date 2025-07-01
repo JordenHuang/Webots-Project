@@ -16,9 +16,9 @@ PROTO MyCreate [
   field SFBool     synchronization TRUE                     # Is `Robot.synchronization`.
   field SFFloat      camera_fieldOfView   0.84         # Is `Camera.fieldOfView`.
   field SFInt32      camera_width         256          # Is `Camera.width`.
-  field SFInt32      camera_height        128           # Is `Camera.height`.
+  field SFInt32      camera_height        256           # Is `Camera.height`.
   field SFBool       camera_antiAliasing  FALSE        # Is `Camera.antiAliasing`.
-  field SFRotation   camera_rotation      0 0 1 3.14   # Is `Camera.rotation`. Interesting setup: set `0 1 0 0.47` in order to simulate the linear camera mode.
+  # field SFRotation   camera_rotation      0 0 1 3.14   # Is `Camera.rotation`. Interesting setup: set `0 1 0 0.47` in order to simulate the linear camera mode.
   field SFFloat      camera_noise         0.0          # Is `Camera.noise`.
   field SFFloat      camera_motionBlur    0.0          # Is `Camera.motionBlur`.
   # field MFNode     bodySlot        []                       # Extends the robot with new nodes in the body slot.
@@ -688,9 +688,13 @@ Robot {
             }
           ]
           name "camera_right"
-          fieldOfView 0.84
-          width 256
-          height 128
+          fieldOfView IS camera_fieldOfView
+          width IS camera_width
+          height IS camera_height
+          near 0.0055
+          antiAliasing IS camera_antiAliasing
+          motionBlur IS camera_motionBlur
+          noise IS camera_noise
           focus DEF CAMERA_FOCUS Focus {
             focalDistance 1
             focalLength 720
@@ -703,9 +707,13 @@ Robot {
             USE CAMERA_POSE
           ]
           name "camera_left"
-          fieldOfView 0.84
-          width 256
-          height 128
+          fieldOfView IS camera_fieldOfView
+          width IS camera_width
+          height IS camera_height
+          near 0.0055
+          antiAliasing IS camera_antiAliasing
+          motionBlur IS camera_motionBlur
+          noise IS camera_noise
           focus USE CAMERA_FOCUS
         }
       ]

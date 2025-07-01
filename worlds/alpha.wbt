@@ -12,8 +12,8 @@ EXTERNPROTO "../protos/KukaBox.proto"
 WorldInfo {
 }
 Viewpoint {
-  orientation -0.29217199490989193 -0.28535101929079604 0.9128035501574683 4.597797036424708
-  position -0.9377187692364519 2.447010055442575 1.4828205576209366
+  orientation -0.24914503832921578 -0.24332794559770252 0.9373997337140306 4.624248663455563
+  position -1.0268957321399985 1.8725891107125234 0.9497671510712331
 }
 TexturedBackground {
 }
@@ -959,25 +959,25 @@ Robot {
       appearance DEF CREATE_APPEARANCE PBRAppearance {
         baseColorMap ImageTexture {
           url [
-            "/home/jordenhuang/programs/Webots-Project/protos/create_textures/create_base_color.jpg"
+            "/home/jordenhuang/Webots-Project/protos/create_textures/create_base_color.jpg"
           ]
         }
         roughness 0.2
         roughnessMap ImageTexture {
           url [
-            "/home/jordenhuang/programs/Webots-Project/protos/create_textures/create_roughness.jpg"
+            "/home/jordenhuang/Webots-Project/protos/create_textures/create_roughness.jpg"
           ]
         }
         metalness 0
         normalMap ImageTexture {
           url [
-            "/home/jordenhuang/programs/Webots-Project/protos/create_textures/create_normal.jpg"
+            "/home/jordenhuang/Webots-Project/protos/create_textures/create_normal.jpg"
           ]
         }
         normalMapFactor 0.3
         occlusionMap ImageTexture {
           url [
-            "/home/jordenhuang/programs/Webots-Project/protos/create_textures/create_occlusion.jpg"
+            "/home/jordenhuang/Webots-Project/protos/create_textures/create_occlusion.jpg"
           ]
         }
       }
@@ -1380,7 +1380,7 @@ Robot {
     DEF ARM_SLOT Group {
       children [
         DEF BASE MyCobot280Pi_solid {
-          translation 0.09 0 0.08
+          translation 0.09 0 0.035
           gripper_slot [
             gripper_v2 {
             }
