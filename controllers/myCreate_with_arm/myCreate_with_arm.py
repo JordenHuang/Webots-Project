@@ -13,6 +13,7 @@ TIMESTEP = int(myCreate.getBasicTimeStep())
 keyboard = Keyboard()
 keyboard.enable(TIMESTEP)
 
+# ========== MyCreate ==========
 left_motor = myCreate.getDevice("left wheel motor")
 right_motor = myCreate.getDevice("right wheel motor")
 left_motor.setPosition(float('+inf'));
@@ -30,7 +31,7 @@ camera_right = myCreate.getDevice("camera_right")
 camera_left.enable(TIMESTEP)
 camera_right.enable(TIMESTEP)
 
-# MyCobot
+# ========== MyCobot ==========
 joints = []
 for i in range(6):
     joints.append(myCreate.getDevice(f"joint{i}_rotational_motor"))
@@ -49,6 +50,8 @@ def mycobot_send_angles(degrees: list, speed=0.05):
 
         # time.sleep(0.01)  # Control loop timing
         myCreate.step(TIMESTEP)  # Small delay to control speed
+
+# ==============================
 
 degrees = [0, -135, 150, -125, 90, 0]
 mycobot_send_angles(degrees)
@@ -77,6 +80,8 @@ while myCreate.step(TIMESTEP) != -1:
             x_pressed = True
             camera_left.saveImage(f"images/cl_{counter:03}.png", None)
             camera_right.saveImage(f"images/cr_{counter:03}.png", None)
+            # camera_left.saveImage(f"cl_{counter:03}.png", None)
+            # camera_right.saveImage(f"cr_{counter:03}.png", None)
             print(f"Saved {counter:03}.png")
             counter += 1
     else:

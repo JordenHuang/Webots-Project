@@ -216,7 +216,7 @@ def mainLoop():
 
 
 def obstacle_avoidance_main_loop():
-    global left_motor, right_motor, left_position_sensor, right_position_sensor, camera_left, camera_right
+    # global left_motor, right_motor, left_position_sensor, right_position_sensor, camera_left, camera_right
     global mannual_control, flag, fl, last_direction, oscillate_count, stuck_count
 
     while myCreate.step(TIMESTEP) != -1:
