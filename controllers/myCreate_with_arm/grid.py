@@ -9,8 +9,14 @@ class Grid:
     FACE_DOWN = 2
     FACE_LEFT = 3
 
+    DIR_OFFSETS = {
+        FACE_UP: (0, -1),
+        FACE_RIGHT: (1, 0),
+        FACE_DOWN: (0, 1),
+        FACE_LEFT: (-1, 0),
+    }
+
     def __init__(self, cellSize):
-        # meter
         self.cellSize = cellSize
         self.grid = [[self.GRID_OK]]
         self.originX = 0
@@ -25,53 +31,28 @@ class Grid:
         self.x = self.prevX
         self.y = self.prevY
 
-    def getFront(self):
-        self.move()
-        val = self.grid[self.y][self.x]
-        self.restorePrev()
-        return val
+    def getOffsetCoord(self, direction):
+        dx, dy = self.DIR_OFFSETS[direction]
+        return self.x + dx, self.y + dy
 
-    def turnFace(self, to:str):
-        if to == "back":
-            self.direction = (self.direction + 2) % 4
-        elif to == "left":
-            self.direction = (self.direction + 3) % 4
-        elif to == "right":
-            self.direction = (self.direction + 1) % 4
-
-    def move(self):
-        self.prevX = self.x
-        self.prevY = self.y
-
-        # up
-        if self.direction == self.FACE_UP:
-            self.y -= 1
-            while self.y < 0:
-                self.grid.insert(0, [self.GRID_UNKNOWN] * len(self.grid[0]))
-                self.y += 1
-                self.originY += 1
-
-        # down
-        elif self.direction == self.FACE_DOWN:
+    def expandToInclude(self, x, y):
+        while y < 0:
+            self.grid.insert(0, [self.GRID_UNKNOWN] * len(self.grid[0]))
+            y += 1
+            self.originY += 1
             self.y += 1
-            while self.y >= len(self.grid):
-                self.grid.append([self.GRID_UNKNOWN] * len(self.grid[0]))
+        while y >= len(self.grid):
+            self.grid.append([self.GRID_UNKNOWN] * len(self.grid[0]))
 
-        # right
-        elif self.direction == self.FACE_RIGHT:
+        while x < 0:
+            for row in self.grid:
+                row.insert(0, self.GRID_UNKNOWN)
+            x += 1
+            self.originX += 1
             self.x += 1
-            while self.x >= len(self.grid[0]):
-                for row in self.grid:
-                    row.append(self.GRID_UNKNOWN)
-
-        # left
-        elif self.direction == self.FACE_LEFT:
-            self.x -= 1
-            while self.x < 0:
-                for row in self.grid:
-                    row.insert(0, self.GRID_UNKNOWN)
-                self.x += 1
-                self.originX += 1
+        while x >= len(self.grid[0]):
+            for row in self.grid:
+                row.append(self.GRID_UNKNOWN)
 
     def mark(self, status):
         self.grid[self.y][self.x] = status
@@ -80,9 +61,23 @@ class Grid:
         self.grid[self.prevY][self.prevX] = status
 
     def markFront(self, status):
-        self.move()
-        self.mark(status)
-        self.restorePrev()
+        fx, fy = self.getOffsetCoord(self.direction)
+        self.expandToInclude(fx, fy)
+        fx, fy = self.getOffsetCoord(self.direction)
+        self.grid[fy][fx] = status
+
+    def turnFace(self, to):
+        if to == "back":
+            self.direction = (self.direction + 2) % 4
+        elif to == "left":
+            self.direction = (self.direction + 3) % 4
+        elif to == "right":
+            self.direction = (self.direction + 1) % 4
+
+    def move(self):
+        self.prevX, self.prevY = self.x, self.y
+        self.x, self.y = self.getOffsetCoord(self.direction)
+        self.expandToInclude(self.x, self.y)
 
     def moveForward(self):
         self.move()
@@ -105,25 +100,18 @@ class Grid:
         self.mark(self.GRID_OK)
 
     def displayGrid(self):
-        for r in range(len(self.grid)):
+        for r, row in enumerate(self.grid):
             print(f"{r:2d}: ", end='')
-            for c in range(len(self.grid[0])):
-                # current position
+            for c, cell in enumerate(row):
                 if r == self.y and c == self.x:
                     print("@", end='')
-                # original point
                 elif r == self.originY and c == self.originX:
                     print("*", end='')
-                # ok
-                elif self.grid[r][c] == self.GRID_OK:
+                elif cell == self.GRID_OK:
                     print("o", end='')
-                # obstacle
-                elif self.grid[r][c] == self.GRID_HAS_OBSTACLE:
+                elif cell == self.GRID_HAS_OBSTACLE:
                     print("x", end='')
-                # unknown
                 else:
                     print("_", end='')
             print()
-        
         print(f"face: {self.direction}")
-

@@ -174,11 +174,40 @@ def go(distance_in_m: float):
 #         # time.sleep(0.01)  # Control loop timing
 #         myCreate.step(TIMESTEP)  # Small delay to control speed
 
+# ========== Visualization ==========
+def visualize_with_cv2(grid: Grid, cell_px=20):
+    h, w = len(grid.grid), len(grid.grid[0])
+    image = np.zeros((h * cell_px, w * cell_px, 3), dtype=np.uint8)
+
+    for y in range(h):
+        for x in range(w):
+            value = grid.grid[y][x]
+            top_left = (x * cell_px, y * cell_px)
+            bottom_right = ((x+1) * cell_px - 1, (y+1) * cell_px - 1)
+
+            if value == grid.GRID_UNKNOWN:
+                color = (128, 128, 128)  # gray
+            elif value == grid.GRID_OK:
+                color = (255, 255, 255)  # white
+            elif value == grid.GRID_HAS_OBSTACLE:
+                color = (0, 0, 0)        # black
+            cv2.rectangle(image, top_left, bottom_right, color, -1)
+
+    # Mark origin with blue
+    ox, oy = grid.originX * cell_px, grid.originY * cell_px
+    cv2.circle(image, (ox + cell_px//2, oy + cell_px//2), cell_px//3, (255, 0, 0), -1)
+
+    # Mark current with red
+    cx, cy = grid.x * cell_px, grid.y * cell_px
+    cv2.circle(image, (cx + cell_px//2, cy + cell_px//2), cell_px//3, (0, 0, 255), -1)
+
+    cv2.imshow("Grid Map", image)
+    cv2.waitKey(1)
+    # cv2.destroyAllWindows()
 # ==============================
 
 # degrees = [0, -135, 150, -125, 90, 0]
 # mycobot_send_angles(degrees)
-
 
 print("Try to connect to server...")
 clientsocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -200,24 +229,20 @@ while myCreate.step(TIMESTEP) != -1:
     if key == ord('W'):
         go(GO_FRONT)
         grid.moveForward()
-        grid.displayGrid()
         print("GO_FRONT")
     elif key == ord('S'):
         go(GO_BACK)
         grid.moveBackward()
-        grid.displayGrid()
         print("GO_BACK")
     elif key == ord('A'):
         # turn(TO_LEFT)
         my_turn(TO_LEFT)
         grid.turnLeft()
-        grid.displayGrid()
         print("TO_LEFT")
     elif key == ord('D'):
         # turn(TO_RIGHT)
         my_turn(TO_RIGHT)
         grid.turnRight()
-        grid.displayGrid()
         print("TO_RIGHT")
     else:
         # update = False
@@ -253,51 +278,45 @@ while myCreate.step(TIMESTEP) != -1:
         print(f"Receive cmd: '{cmd}'", flush=True)
 
         if cmd == "front":
-            # if grid.getFront() == grid.GRID_HAS_OBSTACLE:
-            #     cmd = "back"
-            # else:
-            if True:
+            if grid.getOffsetCoord(grid.direction) == grid.GRID_HAS_OBSTACLE:
+                cmd = "back"
+            else:
                 r = go(GO_FRONT)
                 grid.moveForward()
-                grid.displayGrid()
                 print("GO_FRONT")
                 if r == -1:
                     grid.moveBackward()
                     grid.markPrevious(grid.GRID_HAS_OBSTACLE)
                     cmd = "back"
         if cmd == "back":
-            # if randint(0, 99) < 30:
-            #     go(GO_BACK)
-            #     grid.moveBackward()
-            #     grid.displayGrid()
-            #     print("GO_BACK")
-            #     turn(TO_RIGHT)
+            grid.markFront(grid.GRID_HAS_OBSTACLE)
+            a = randint(0, 99)
+            if a < 30:
+                go(GO_BACK)
+                grid.moveBackward()
+                print("GO_BACK")
             # if randint(0, 99) < 50:
             my_turn(TO_RIGHT)
             grid.turnRight()
-            grid.displayGrid()
             print("TO_RIGHT")
             # else:
             #     my_turn(TO_LEFT)
             #     grid.turnLeft()
-            #     grid.displayGrid()
             #     print("TO_LEFT")
         elif cmd == "left":
-            # turn(TO_LEFT)
             my_turn(TO_LEFT)
-            # grid.markFront(grid.GRID_HAS_OBSTACLE)
+            grid.markFront(grid.GRID_HAS_OBSTACLE)
             grid.turnLeft()
-            grid.displayGrid()
             print("TO_LEFT")
         elif cmd == "right":
-            # turn(TO_RIGHT)
             my_turn(TO_RIGHT)
-            # grid.markFront(grid.GRID_HAS_OBSTACLE)
+            grid.markFront(grid.GRID_HAS_OBSTACLE)
             grid.turnRight()
-            grid.displayGrid()
             print("TO_RIGHT")
         else:
             stop()
+        visualize_with_cv2(grid)
+        # grid.displayGrid()
 
 
     # camRawLeft  = camera_left.getImage()  # returns a byte string
