@@ -4,6 +4,7 @@ import sys
 import cv2
 import numpy as np
 import socket
+from random import randint
 
 from grid import Grid
 
@@ -92,19 +93,24 @@ def turn(angle: float):
     step()
 
 # Turn 90 degrees
-# def my_turn(angle: float):
-#     stop()
-#     i = (np.pi * AXLE_LENGTH / 2) / (WHEEL_RADIUS * np.pi * 2)
-#     neg = -1.0 if angle < 0.0 else 1.0
-#     print(i)
-#     left_motor.setVelocity(neg * np.pi * 2)
-#     right_motor.setVelocity(-neg * np.pi * 2)
-#     c = 0
-#     while c <= i:
-#         myCreate.step(TIMESTEP)
-#         c += 1 / TIMESTEP
-#     stop()
-#     return
+def my_turn(angle: float):
+    neg = -1.0 if angle < 0.0 else 1.0
+    vel = neg * np.pi * 1
+    left_motor.setVelocity(vel)
+    right_motor.setVelocity(-vel)
+    myCreate.step(TIMESTEP * 74)
+    # stop()
+    # i = (np.pi * AXLE_LENGTH / 2) / (WHEEL_RADIUS * np.pi * 2)
+    # neg = -1.0 if angle < 0.0 else 1.0
+    # print(i)
+    # left_motor.setVelocity(neg * np.pi * 2)
+    # right_motor.setVelocity(-neg * np.pi * 2)
+    # c = 0
+    # while c <= i:
+    #     myCreate.step(TIMESTEP)
+    #     c += 1 / TIMESTEP
+    # stop()
+    return
 
 def go(distance_in_m: float):
     # print(f"Go {distance_in_m}m")
@@ -188,35 +194,36 @@ update = True
 while myCreate.step(TIMESTEP) != -1:
     WHEEL_MAX_SPEED = 6.28
     FORWARD_RATIO = 1 # 0.75
+
+    update = True
     key = keyboard.getKey()
     if key == ord('W'):
         go(GO_FRONT)
         grid.moveForward()
         grid.displayGrid()
         print("GO_FRONT")
-        update = True
     elif key == ord('S'):
         go(GO_BACK)
         grid.moveBackward()
         grid.displayGrid()
         print("GO_BACK")
-        update = True
     elif key == ord('A'):
-        turn(TO_LEFT)
+        # turn(TO_LEFT)
+        my_turn(TO_LEFT)
         grid.turnLeft()
         grid.displayGrid()
         print("TO_LEFT")
-        update = True
     elif key == ord('D'):
-        turn(TO_RIGHT)
+        # turn(TO_RIGHT)
+        my_turn(TO_RIGHT)
         grid.turnRight()
         grid.displayGrid()
         print("TO_RIGHT")
-        update = True
     else:
+        # update = False
         stop()
 
-    if update:
+    if update == True:
         update = False
         camRawLeft  = camera_left.getImage()  # returns a byte string
         width = camera_left.getWidth()
@@ -246,38 +253,49 @@ while myCreate.step(TIMESTEP) != -1:
         print(f"Receive cmd: '{cmd}'", flush=True)
 
         if cmd == "front":
-            if grid.getFront() == grid.GRID_HAS_OBSTACLE:
-                cmd = "back"
-            else:
+            # if grid.getFront() == grid.GRID_HAS_OBSTACLE:
+            #     cmd = "back"
+            # else:
+            if True:
                 r = go(GO_FRONT)
                 grid.moveForward()
                 grid.displayGrid()
                 print("GO_FRONT")
-                update = True
                 if r == -1:
+                    grid.moveBackward()
+                    grid.markPrevious(grid.GRID_HAS_OBSTACLE)
                     cmd = "back"
         if cmd == "back":
-            go(GO_BACK)
-            grid.moveBackward()
-            grid.displayGrid()
-            print("GO_BACK")
-            turn(TO_RIGHT)
+            # if randint(0, 99) < 30:
+            #     go(GO_BACK)
+            #     grid.moveBackward()
+            #     grid.displayGrid()
+            #     print("GO_BACK")
+            #     turn(TO_RIGHT)
+            # if randint(0, 99) < 50:
+            my_turn(TO_RIGHT)
             grid.turnRight()
             grid.displayGrid()
             print("TO_RIGHT")
-            update = True
+            # else:
+            #     my_turn(TO_LEFT)
+            #     grid.turnLeft()
+            #     grid.displayGrid()
+            #     print("TO_LEFT")
         elif cmd == "left":
-            turn(TO_LEFT)
+            # turn(TO_LEFT)
+            my_turn(TO_LEFT)
+            # grid.markFront(grid.GRID_HAS_OBSTACLE)
             grid.turnLeft()
             grid.displayGrid()
             print("TO_LEFT")
-            update = True
         elif cmd == "right":
-            turn(TO_RIGHT)
+            # turn(TO_RIGHT)
+            my_turn(TO_RIGHT)
+            # grid.markFront(grid.GRID_HAS_OBSTACLE)
             grid.turnRight()
             grid.displayGrid()
             print("TO_RIGHT")
-            update = True
         else:
             stop()
 

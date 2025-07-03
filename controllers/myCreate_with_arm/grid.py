@@ -8,27 +8,28 @@ class Grid:
     FACE_RIGHT = 1
     FACE_DOWN = 2
     FACE_LEFT = 3
-    # Order matters
-    # FACES = [
-    #     FACE_UP,
-    #     FACE_RIGHT,
-    #     FACE_DOWN,
-    #     FACE_LEFT,
-    # ]
 
     def __init__(self, cellSize):
         # meter
         self.cellSize = cellSize
         self.grid = [[self.GRID_OK]]
-        self.x = 0
-        self.y = 0
         self.originX = 0
         self.originY = 0
+        self.x = 0
+        self.y = 0
+        self.prevX = 0
+        self.prevY = 0
         self.direction = self.FACE_LEFT
 
+    def restorePrev(self):
+        self.x = self.prevX
+        self.y = self.prevY
+
     def getFront(self):
-        # FIXME: Fix this, not the current grid, but the front one
-        return self.grid[self.y][self.x]
+        self.move()
+        val = self.grid[self.y][self.x]
+        self.restorePrev()
+        return val
 
     def turnFace(self, to:str):
         if to == "back":
@@ -38,7 +39,10 @@ class Grid:
         elif to == "right":
             self.direction = (self.direction + 1) % 4
 
-    def setGrid(self, status):
+    def move(self):
+        self.prevX = self.x
+        self.prevY = self.y
+
         # up
         if self.direction == self.FACE_UP:
             self.y -= 1
@@ -69,31 +73,36 @@ class Grid:
                 self.x += 1
                 self.originX += 1
 
+    def mark(self, status):
         self.grid[self.y][self.x] = status
 
+    def markPrevious(self, status):
+        self.grid[self.prevY][self.prevX] = status
+
+    def markFront(self, status):
+        self.move()
+        self.mark(status)
+        self.restorePrev()
+
     def moveForward(self):
-        self.setGrid(self.GRID_OK)
+        self.move()
+        self.mark(self.GRID_OK)
 
     def moveBackward(self):
         self.turnFace("back")
-        self.setGrid(self.GRID_OK)
+        self.move()
+        self.mark(self.GRID_OK)
         self.turnFace("back")
 
     def turnLeft(self):
-        self.setGrid(self.GRID_HAS_OBSTACLE)
-        self.turnFace("back")
-        self.setGrid(self.GRID_OK)
-        self.turnFace("back")
-
         self.turnFace("left")
+        self.move()
+        self.mark(self.GRID_OK)
 
     def turnRight(self):
-        self.setGrid(self.GRID_HAS_OBSTACLE)
-        self.turnFace("back")
-        self.setGrid(self.GRID_OK)
-        self.turnFace("back")
-
         self.turnFace("right")
+        self.move()
+        self.mark(self.GRID_OK)
 
     def displayGrid(self):
         for r in range(len(self.grid)):
