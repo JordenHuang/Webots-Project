@@ -1,9 +1,12 @@
 #VRML_SIM R2023b utf8
 
 PROTO box_large [
-  field  SFVec3f     translation  0 0 0
-  field  SFRotation  rotation     0 0 1 0
-  field  SFString    name         "box_large"  # Is `Robot.name`.
+  field  SFVec3f     translation      0 0 0
+  field  SFRotation  rotation         0 0 1 0
+  field  SFString    name             "box_large"
+  field  SFColor     color            0.35 0.35 0.4
+  field  SFString    contactMaterial  "default"
+  field  SFNode      physics          Physics { density 2700 }  # Default to aluminium density.
 ]
 
 {
@@ -13,7 +16,7 @@ PROTO box_large [
     children [
       DEF BOX_LARGE_SHAPE Shape {
         appearance PBRAppearance {
-          baseColor 0.35 0.35 0.4
+          baseColor IS color
           roughness 0.2
           metalness 0
         }
@@ -24,9 +27,11 @@ PROTO box_large [
     ]
     name IS name
     boundingObject USE BOX_LARGE_SHAPE
-    physics Physics {
-      density -1
-      mass 0.5
-    }
+    # physics Physics {
+    #   density -1
+    #   mass 0.5
+    # }
+    physics IS physics
+    contactMaterial IS contactMaterial
   }
 }
