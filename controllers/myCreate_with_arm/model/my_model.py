@@ -36,7 +36,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 from PIL import Image
 
-IMAGE_RESIZE_TO = (256, 256)
+IMAGE_WIDTH = 256
+IMAGE_HEIGHT = 256
+IMAGE_RESIZE_TO = (IMAGE_HEIGHT, IMAGE_WIDTH)
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 # Common transform for images
