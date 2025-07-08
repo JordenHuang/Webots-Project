@@ -4,6 +4,7 @@ import cv2
 import numpy as np
 import os
 
+os.makedirs("images", exist_ok=True)
 
 # Create the robot instance
 myCreate = Robot()
