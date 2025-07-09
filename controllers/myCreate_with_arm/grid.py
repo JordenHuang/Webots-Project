@@ -91,12 +91,12 @@ class Grid:
 
     def turnLeft(self):
         self.turnFace("left")
-        self.move()
+        # self.move()
         self.mark(self.GRID_OK)
 
     def turnRight(self):
         self.turnFace("right")
-        self.move()
+        # self.move()
         self.mark(self.GRID_OK)
 
     def displayGrid(self):

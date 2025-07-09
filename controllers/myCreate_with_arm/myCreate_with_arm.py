@@ -287,7 +287,8 @@ while myCreate.step(TIMESTEP) != -1:
                 if r == -1:
                     grid.moveBackward()
                     grid.markPrevious(grid.GRID_HAS_OBSTACLE)
-                    cmd = "back"
+                    cmd = "right"
+                    print("GO_FRONT, but has obstacle, so make cmd = right")
         if cmd == "back":
             grid.markFront(grid.GRID_HAS_OBSTACLE)
             a = randint(0, 99)
@@ -295,28 +296,23 @@ while myCreate.step(TIMESTEP) != -1:
                 go(GO_BACK)
                 grid.moveBackward()
                 print("GO_BACK")
-            # if randint(0, 99) < 50:
             my_turn(TO_RIGHT)
             grid.turnRight()
             print("TO_RIGHT")
-            # else:
-            #     my_turn(TO_LEFT)
-            #     grid.turnLeft()
-            #     print("TO_LEFT")
         elif cmd == "left":
-            my_turn(TO_LEFT)
             grid.markFront(grid.GRID_HAS_OBSTACLE)
+            my_turn(TO_LEFT)
             grid.turnLeft()
             print("TO_LEFT")
         elif cmd == "right":
-            my_turn(TO_RIGHT)
             grid.markFront(grid.GRID_HAS_OBSTACLE)
+            my_turn(TO_RIGHT)
             grid.turnRight()
             print("TO_RIGHT")
         else:
             stop()
-        visualize_with_cv2(grid)
-        # grid.displayGrid()
+    visualize_with_cv2(grid)
+    # grid.displayGrid()
 
 
     # camRawLeft  = camera_left.getImage()  # returns a byte string
