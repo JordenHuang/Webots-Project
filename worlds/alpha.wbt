@@ -8,12 +8,14 @@ EXTERNPROTO "../protos/TurtleBot3Waffle.proto"
 EXTERNPROTO "../protos/MyCobot280Pi_solid.proto"
 EXTERNPROTO "../protos/gripper_v2.proto"
 EXTERNPROTO "../protos/KukaBox.proto"
+EXTERNPROTO "../protos/box_medium.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/lego/protos/LegoWheel.proto"
 
 WorldInfo {
 }
 Viewpoint {
-  orientation -0.24914503832921578 -0.24332794559770252 0.9373997337140306 4.624248663455563
-  position -1.0268957321399985 1.8725891107125234 0.9497671510712331
+  orientation -0.20891040314027462 -0.19799733873864483 0.9576813130223343 4.615667053246861
+  position -0.8268542175305671 1.5312107646746091 0.47946064772377833
 }
 TexturedBackground {
 }
@@ -951,7 +953,7 @@ Robot {
   controller "create_avoid_obstacles"
 }
 Robot {
-  translation -1.18 0.62 0.044
+  translation -1.18 0.68 0.044
   children [
     DEF BODY_SLOT Group {
     }
@@ -1017,7 +1019,7 @@ Robot {
         }
       ]
       endPoint DEF CREATE_RIGHT_WHEEL Solid {
-        translation -0.0062 -0.1359 -0.014
+        translation -0.0062 -0.13589999999999589 -0.014
         rotation 0 1 0 0
         children [
           Pose {
@@ -1081,7 +1083,7 @@ Robot {
         }
       ]
       endPoint DEF CREATE_LEFT_WHEEL Solid {
-        translation -0.0062 0.1359 -0.014
+        translation -0.0062 0.13589999999999594 -0.014
         rotation 0 1 0 0
         children [
           Pose {
@@ -1334,7 +1336,7 @@ Robot {
     DEF CAMERAS Pose {
       children [
         Camera {
-          translation 0.17 -0.05 0.0499997
+          translation 0.17 -0.04 0.0499997
           rotation 0 1 0 0.261799
           children [
             DEF CAMERA_POSE Pose {
@@ -1355,24 +1357,23 @@ Robot {
             }
           ]
           name "camera_right"
-          fieldOfView 0.84
-          width 256
-          height 128
+          fieldOfView 1.047
+          width 1080
+          height 720
           focus DEF CAMERA_FOCUS Focus {
-            focalDistance 1
-            focalLength 720
+            focalLength 0.004
           }
         }
         Camera {
-          translation 0.17 0.05 0.05
+          translation 0.17 0.04 0.05
           rotation 0 1 0 0.261799
           children [
             USE CAMERA_POSE
           ]
           name "camera_left"
-          fieldOfView 0.84
-          width 256
-          height 128
+          fieldOfView 1.047
+          width 1080
+          height 720
           focus USE CAMERA_FOCUS
         }
       ]
@@ -1401,8 +1402,28 @@ Robot {
     density -1
     mass 1.8
   }
-  controller "myCreate_with_arm"
+  controller "myCreate_map"
 }
 KukaBox {
-  translation -0.74 0.55 0.01
+  translation -0.74 0.72 0.01
+}
+KukaBox {
+  translation -0.63 0.48 0.01
+  name "Kuka box(1)"
+}
+KukaBox {
+  translation -0.72 0.56 0.01
+  name "Kuka box(3)"
+}
+KukaBox {
+  translation -0.56 0.76 0.01
+  name "Kuka box(7)"
+}
+box_medium {
+  translation -0.48 0.73 0.03
+  name "box_medium(2)"
+}
+LegoWheel {
+  translation -0.54 0.59 0.0219974
+  rotation 0 0 1 -1.5707953071795862
 }
