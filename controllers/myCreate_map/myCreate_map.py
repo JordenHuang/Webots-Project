@@ -5,6 +5,7 @@ import cv2
 import numpy as np
 import socket
 from random import randint
+import matplotlib.pyplot as plt
 
 
 
@@ -237,37 +238,7 @@ R1, R2, P1, P2, Q_reproj, validPixROI1, validPixROI2 = cv2.stereoRectify(
 map1_left, map2_left = cv2.initUndistortRectifyMap(K_left, D_left, R1, P1, (width, height), cv2.CV_16SC2)
 map1_right, map2_right = cv2.initUndistortRectifyMap(K_right, D_right, R2, P2, (width, height), cv2.CV_16SC2)
 
-
-counter = 0
-back_counter = 0
-update = True
-# Main loop
-while myCreate.step(TIMESTEP) != -1:
-    WHEEL_MAX_SPEED = 6.28
-    FORWARD_RATIO = 1 # 0.75
-
-    update = True
-    key = keyboard.getKey()
-    if key == ord('W'):
-        go(GO_FRONT)
-        print("GO_FRONT")
-    elif key == ord('S'):
-        go(GO_BACK)
-        print("GO_BACK")
-    elif key == ord('A'):
-        # turn(TO_LEFT)
-        my_turn(TO_LEFT)
-        print("TO_LEFT")
-    elif key == ord('D'):
-        # turn(TO_RIGHT)
-        my_turn(TO_RIGHT)
-        print("TO_RIGHT")
-    else:
-        # update = False
-        stop()
-
-
-
+def get_3d_point_cloud():
     # Inside your main loop:
     camRawLeft = camera_left.getImage()
     camRawRight = camera_right.getImage()
@@ -329,7 +300,7 @@ while myCreate.step(TIMESTEP) != -1:
         speckleWindowSize=50,
         speckleRange=2,
         preFilterCap=63,
-        # mode=cv2.STEREO_SGBM_MODE_SGBM_3WAY  # 增強一致性
+        mode=cv2.STEREO_SGBM_MODE_SGBM_3WAY  # 增強一致性
     )
     disparity = stereo.compute(gray_left_rectified, gray_right_rectified).astype(np.float32) / 16.0
 
@@ -351,7 +322,7 @@ while myCreate.step(TIMESTEP) != -1:
         cv2.resize(cv2.cvtColor(disparity_display, cv2.COLOR_GRAY2BGR), (width//r, height//r))
     ])
     cv2.imshow("Stereo Pipeline Debug", combined)
-    cv2.imwrite("StereoPipelineDebug.png", combined)
+    # cv2.imwrite("StereoPipelineDebug.png", combined)
 
 
     
@@ -398,13 +369,85 @@ while myCreate.step(TIMESTEP) != -1:
     # x, y = 391, 391
     # x, y = 354, 210
     # x, y = 583, 285
-    x, y = 534, 412
-    d = disparity[y, x]
-    print(f"Disparity at ({x},{y}): {d}")
-    point = depth_map[y, x]
-    print(f"Depth at ({x},{y}): {point:.2f} m")
+    # x, y = 534, 412
+    # d = disparity[y, x]
+    # print(f"Disparity at ({x},{y}): {d}")
+    # point = depth_map[y, x]
+    # print(f"Depth at ({x},{y}): {point:.2f} m")
+    return threeDPoint
 
+def view_map(point_cloud):
+    # 過濾不合法的點（NaN、inf、負Z）
+    mask = np.isfinite(point_cloud[:, :, 2]) & (point_cloud[:, :, 2] > 0)
+    points_valid = point_cloud[mask]  # shape: (N, 3)
+
+    # 取得 X-Z (忽略高度)
+    points_2d = points_valid[:, [0, 2]]  # shape: (N, 2)
+
+    cell_size = 0.05  # 每格 5cm
+    x_min, z_min = points_2d.min(axis=0)
+    x_max, z_max = points_2d.max(axis=0)
+
+    width_cells  = int(np.ceil((x_max - x_min) / cell_size))
+    height_cells = int(np.ceil((z_max - z_min) / cell_size))
+
+    # 建立空白地圖，初始為 -1（未知）
+    grid_map = np.full((height_cells, width_cells), -1, dtype=np.int8)
+
+    # 將點轉為 cell 座標
+    grid_x = ((points_2d[:, 0] - x_min) / cell_size).astype(int)
+    grid_y = ((points_2d[:, 1] - z_min) / cell_size).astype(int)
+
+    # 標記 cell 為可達（或障礙物）
+    for x, y in zip(grid_x, grid_y):
+        if 0 <= y < height_cells and 0 <= x < width_cells:
+            grid_map[y, x] = 0  # 你可以先標為可達區域
+
+    for x, y, point in zip(grid_x, grid_y, points_valid):
+        if 0 <= y < height_cells and 0 <= x < width_cells:
+            if point[1] > 0.1:  # 高度大於10cm
+                grid_map[y, x] = 1  # 有障礙物
+            else:
+                grid_map[y, x] = 0  # 可走
+
+    plt.imshow(grid_map, cmap='gray', origin='lower')
+    plt.title("2D Occupancy Grid Map")
+    plt.xlabel("X (grid)")
+    plt.ylabel("Z (grid)")
+    plt.show()
+
+
+counter = 0
+back_counter = 0
+update = True
+# Main loop
+while myCreate.step(TIMESTEP) != -1:
+    WHEEL_MAX_SPEED = 6.28
+    FORWARD_RATIO = 1 # 0.75
+
+    update = True
+    key = keyboard.getKey()
+    if key == ord('W'):
+        go(GO_FRONT)
+        print("GO_FRONT")
+    elif key == ord('S'):
+        go(GO_BACK)
+        print("GO_BACK")
+    elif key == ord('A'):
+        # turn(TO_LEFT)
+        my_turn(TO_LEFT)
+        print("TO_LEFT")
+    elif key == ord('D'):
+        # turn(TO_RIGHT)
+        my_turn(TO_RIGHT)
+        print("TO_RIGHT")
+    else:
+        # update = False
+        stop()
     
+    point_cloud = get_3d_point_cloud()
+    np.save('3dPointCloud', point_cloud)
+
     # Remember to also handle cv2.waitKey(1) and cv2.destroyAllWindows() properly in your main loop's exit condition.
     cv2.waitKey(1)
 

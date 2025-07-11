@@ -2,3 +2,4 @@ __pycache__
 images
 .venv
 README_PRIVATE.md
+3dPointCloud.npy
