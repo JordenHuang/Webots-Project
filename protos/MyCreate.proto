@@ -1,37 +1,34 @@
-#VRML_SIM R2023a utf8
+#VRML_SIM R2025a utf8
 # license: Copyright Cyberbotics Ltd. Licensed for use only with Webots.
 # license url: https://cyberbotics.com/webots_assets_license
 # documentation url: https://www.cyberbotics.com/doc/guide/create
 # iRobot Create is a hobbyist robot manufactured by iRobot that is based on the Roomba platform.
 
 PROTO MyCreate [
-  field SFVec3f    translation     0 0 0.044                # Is `Transform.translation`.
-  field SFRotation rotation        0 0 1 0                  # Is `Transform.rotation`.
-  field SFString   name            "MyCreate"                 # Is `Solid.name`.
-  field SFString   controller      "create_avoid_obstacles" # Is `Robot.controller`.
-  field MFString   controllerArgs  []                       # Is `Robot.controllerArgs`.
-  field SFString   window          "<generic>"              # Is `Robot.window`.
-  field SFString   customData      ""                       # Is `Robot.customData`.
-  field SFBool     supervisor      FALSE                    # Is `Robot.supervisor`.
-  field SFBool     synchronization TRUE                     # Is `Robot.synchronization`.
-  field SFFloat      camera_fieldOfView   0.84         # Is `Camera.fieldOfView`.
-  field SFInt32      camera_width         256          # Is `Camera.width`.
-  field SFInt32      camera_height        256           # Is `Camera.height`.
-  field SFBool       camera_antiAliasing  FALSE        # Is `Camera.antiAliasing`.
-  # field SFRotation   camera_rotation      0 0 1 3.14   # Is `Camera.rotation`. Interesting setup: set `0 1 0 0.47` in order to simulate the linear camera mode.
-  field SFFloat      camera_noise         0.0          # Is `Camera.noise`.
-  field SFFloat      camera_motionBlur    0.0          # Is `Camera.motionBlur`.
-  # field MFNode     bodySlot        []                       # Extends the robot with new nodes in the body slot.
-  field  MFNode      arm_slot             []           # Put the arm here
+  field SFVec3f    translation          0 0 0.4         # Is `Transform.translation`.
+  field SFRotation rotation             0 0 1 0         # Is `Transform.rotation`.
+  field SFString   name                 "MyCreate"      # Is `Solid.name`.
+  field SFString   controller           "<none>"        # Is `Robot.controller`.
+  field MFString   controllerArgs       []              # Is `Robot.controllerArgs`.
+  field SFString   window               "<generic>"     # Is `Robot.window`.
+  field SFString   customData           ""              # Is `Robot.customData`.
+  field SFBool     supervisor           FALSE           # Is `Robot.supervisor`.
+  field SFBool     synchronization      TRUE            # Is `Robot.synchronization`.
+  field SFFloat    camera_fieldOfView   1               # Is `Camera.fieldOfView`.
+  field SFFloat    camera_focalLength   0.004           # Is `Camera.focalLength`.
+  field SFInt32    camera_width         640             # Is `Camera.width`.
+  field SFInt32    camera_height        480             # Is `Camera.height`.
+  # field SFBool     camera_antiAliasing  FALSE           # Is `Camera.antiAliasing`.
+  field SFRotation camera_rotation      0 1 0 0.261799  # Is `Camera.rotation`. Interesting setup: set `0 1 0 0.47` in order to simulate the linear camera mode.
+  # field SFFloat    camera_noise         0.0             # Is `Camera.noise`.
+  # field SFFloat    camera_motionBlur    0.0             # Is `Camera.motionBlur`.
+  field  MFNode      arm_slot             []             # Put the arm here
 ]
 {
 Robot {
   translation IS translation
   rotation IS rotation
   children [
-    DEF BODY_SLOT Group {
-      children IS bodySlot
-    }
     Shape {
       appearance DEF CREATE_APPEARANCE PBRAppearance {
         metalness 0
@@ -667,8 +664,8 @@ Robot {
     DEF CAMERAS Pose {
       children [
         Camera {
-          translation 0.17 -0.05 0.0499997
-          rotation 0 1 0 0.261799
+          translation 0.17 -0.05 0.05
+          rotation IS camera_rotation
           children [
             DEF CAMERA_POSE Pose {
               rotation 0 1 0 1.5708
@@ -691,18 +688,16 @@ Robot {
           fieldOfView IS camera_fieldOfView
           width IS camera_width
           height IS camera_height
-          near 0.0055
-          antiAliasing IS camera_antiAliasing
-          motionBlur IS camera_motionBlur
-          noise IS camera_noise
+          # antiAliasing IS camera_antiAliasing
+          # motionBlur IS camera_motionBlur
+          # noise IS camera_noise
           focus DEF CAMERA_FOCUS Focus {
-            focalDistance 1
-            focalLength 720
+            focalLength IS camera_focalLength
           }
         }
         Camera {
           translation 0.17 0.05 0.05
-          rotation 0 1 0 0.261799
+          rotation IS camera_rotation
           children [
             USE CAMERA_POSE
           ]
@@ -710,10 +705,9 @@ Robot {
           fieldOfView IS camera_fieldOfView
           width IS camera_width
           height IS camera_height
-          near 0.0055
-          antiAliasing IS camera_antiAliasing
-          motionBlur IS camera_motionBlur
-          noise IS camera_noise
+          # antiAliasing IS camera_antiAliasing
+          # motionBlur IS camera_motionBlur
+          # noise IS camera_noise
           focus USE CAMERA_FOCUS
         }
       ]
