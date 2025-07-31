@@ -4,25 +4,24 @@
 # documentation url: https://www.cyberbotics.com/doc/guide/create
 # iRobot Create is a hobbyist robot manufactured by iRobot that is based on the Roomba platform.
 
-PROTO MyCreate [
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/devices/microsoft/protos/Kinect.proto"
+
+PROTO MyCreate_kinect [
   field SFVec3f    translation          0 0 0.4         # Is `Transform.translation`.
   field SFRotation rotation             0 0 1 0         # Is `Transform.rotation`.
-  field SFString   name                 "MyCreate"      # Is `Solid.name`.
+  field SFString   name                 "MyCreate_kinect"      # Is `Solid.name`.
   field SFString   controller           "<none>"        # Is `Robot.controller`.
   field MFString   controllerArgs       []              # Is `Robot.controllerArgs`.
   field SFString   window               "<generic>"     # Is `Robot.window`.
   field SFString   customData           ""              # Is `Robot.customData`.
   field SFBool     supervisor           FALSE           # Is `Robot.supervisor`.
   field SFBool     synchronization      TRUE            # Is `Robot.synchronization`.
-  field SFFloat    camera_fieldOfView   1               # Is `Camera.fieldOfView`.
-  field SFFloat    camera_focalLength   0.004           # Is `Camera.focalLength`.
-  field SFInt32    camera_width         640             # Is `Camera.width`.
-  field SFInt32    camera_height        480             # Is `Camera.height`.
-  # field SFBool     camera_antiAliasing  FALSE           # Is `Camera.antiAliasing`.
-  field SFRotation camera_rotation      0 1 0 0.261799  # Is `Camera.rotation`. Interesting setup: set `0 1 0 0.47` in order to simulate the linear camera mode.
-  # field SFFloat    camera_noise         0.0             # Is `Camera.noise`.
-  # field SFFloat    camera_motionBlur    0.0             # Is `Camera.motionBlur`.
-  field  MFNode      arm_slot             []             # Put the arm here
+  field SFInt32    camera_width         640             # Is `Kinect.width`.
+  field SFInt32    camera_height        480             # Is `Kinect.height`.
+  field SFVec3f    camera_translation   0.14 0 0        # Is `Kinect.translation`.
+  field SFRotation camera_rotation      0 1 0 0         # Is `Kinect.rotation`.
+  field SFFloat    camera_maxRange      3.5             # Is `Kinect.maxRange`.
+  field MFNode     arm_slot             []              # Put the arm here
 ]
 {
 Robot {
@@ -661,56 +660,12 @@ Robot {
         }
       ]
     }
-    DEF CAMERAS Pose {
-      children [
-        Camera {
-          translation 0.17 -0.05 0.05
-          rotation IS camera_rotation
-          children [
-            DEF CAMERA_POSE Pose {
-              rotation 0 1 0 1.5708
-              children [
-                DEF CAMERA_SHAPE Shape {
-                  appearance PBRAppearance {
-                    baseColor 0.3 0.3 0.3
-                    roughness 1
-                    metalness 0
-                  }
-                  geometry Cylinder {
-                    height 0.01
-                    radius 0.008
-                  }
-                }
-              ]
-            }
-          ]
-          name "camera_right"
-          fieldOfView IS camera_fieldOfView
-          width IS camera_width
-          height IS camera_height
-          # antiAliasing IS camera_antiAliasing
-          # motionBlur IS camera_motionBlur
-          # noise IS camera_noise
-          focus DEF CAMERA_FOCUS Focus {
-            focalLength IS camera_focalLength
-          }
-        }
-        Camera {
-          translation 0.17 0.05 0.05
-          rotation IS camera_rotation
-          children [
-            USE CAMERA_POSE
-          ]
-          name "camera_left"
-          fieldOfView IS camera_fieldOfView
-          width IS camera_width
-          height IS camera_height
-          # antiAliasing IS camera_antiAliasing
-          # motionBlur IS camera_motionBlur
-          # noise IS camera_noise
-          focus USE CAMERA_FOCUS
-        }
-      ]
+    Kinect {
+      translation IS camera_translation
+      rotation IS camera_rotation
+      width IS camera_width
+      height IS camera_height
+      maxRange IS camera_maxRange
     }
     DEF ARM_SLOT Group {
       children [
@@ -721,8 +676,8 @@ Robot {
     }
   ]
   name IS name
-  model "IRobot Create"
-  description "IRobot Create"
+  model "IRobot Create with Kinect"
+  description "IRobot Create with Kinect"
   boundingObject Cylinder {
     height 0.07
     radius 0.1675
