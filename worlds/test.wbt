@@ -12,8 +12,8 @@ EXTERNPROTO "../protos/MyCreate_kinect.proto"
 WorldInfo {
 }
 Viewpoint {
-  orientation -0.18452333502618934 0.31107283880206255 0.9323008247290349 1.1333231216301627
-  position -2.1404452010351496 -5.13377642779036 2.754003668998128
+  orientation -0.12404376510401287 0.12782454234613416 0.9840091619049194 1.5569155281675349
+  position -0.5829266336924345 -3.615764500882063 1.297111043672908
 }
 TexturedBackground {
 }
@@ -410,6 +410,8 @@ Robot {
     Kinect {
       translation 0.14 0 0
     }
+    InertialUnit {
+    }
   ]
   name "MyCreate"
   model "IRobot Create"
@@ -423,7 +425,7 @@ Robot {
     density -1
     mass 1.8
   }
-  controller "myCreate_kinect"
+  controller "<none>"
 }
 OfficeChair {
   translation 0.94 -0.61 0
@@ -435,7 +437,6 @@ LegoWheel {
   translation 0.6 0.17 0.0219974
 }
 MyCreate_kinect {
-  hidden rotation_21 0.5773835993351214 -0.5772836021755032 -0.577383600285023 2.0943999990502626
   translation -0.98 0 0.19
   controller "myCreate_kinect"
 }

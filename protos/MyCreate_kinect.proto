@@ -667,6 +667,8 @@ Robot {
       height IS camera_height
       maxRange IS camera_maxRange
     }
+    InertialUnit {
+    }
     DEF ARM_SLOT Group {
       children [
         Pose {
